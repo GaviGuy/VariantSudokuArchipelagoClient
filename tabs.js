@@ -7,4 +7,6 @@ function setTab(index) {
     document.getElementById("tab-contents").children[activeTab].classList.remove("active");
     document.getElementById("tab-contents").children[index].classList.add("active");
     activeTab = index;
+
+    if(index == 1) loadPuzzles();
 }

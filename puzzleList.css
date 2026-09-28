@@ -1,0 +1,26 @@
+
+.puzzle-container {
+    border: 2px solid #000;
+    border-radius: 4px;
+    margin-top: 0.5em;
+    padding: 0.5em;
+}
+
+.puzzle-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.puzzle-author::before {
+    content: " - ";
+}
+
+.tab1-tags {
+    margin-top: 0.5em;
+}
+
+.tab1-tags>* {
+    border: 1px solid #000;
+    border-radius: 1px;
+    margin-right: 0.25em;
+}

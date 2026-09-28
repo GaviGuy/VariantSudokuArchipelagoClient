@@ -11,6 +11,17 @@
             "hints": ["idk if i'm actually gonna have hints just yet"],
             "solutionHint": "Digits in row 7, left to right",
             "solutionCode": "123456789"
+        },
+        {
+            "title": "puzzle 2",
+            "author": "author 2",
+            "link": "https://2",
+            "rating": 2,
+            "duration": 2,
+            "tags": ["2", "2", "2"],
+            "hints": ["2"],
+            "solutionHint": "the number 2, 9 times",
+            "solutionCode": "222222222"
         }
 
     ]
