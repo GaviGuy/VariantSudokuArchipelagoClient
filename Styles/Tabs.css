@@ -12,7 +12,13 @@
 }
 
 #tab-buttons>button {
-    margin: 2rem;
+    margin: 1em;
+    font-size: 2rem;
+    border: 1px solid var(--color-main);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 #tab-buttons>button.active {

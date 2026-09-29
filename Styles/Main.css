@@ -1,8 +1,10 @@
 body {
+    --color-bg: #FFFFFF;
+    --color-main: #220;
     margin: 0;
 }
 
-#connection-info {
+/* #connection-info {
     --bg: #BA0;
     display: flex;
     flex-direction: column;
@@ -17,4 +19,4 @@ body {
     padding-bottom: 1rem;
     padding-top: 1rem;
     width: min(calc(100% - 4rem), 44rem);
-}
+} */

@@ -1,0 +1,42 @@
+#connection-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items:center;
+
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #DDD;
+    position: sticky;
+    top: 0px;
+    height: 2.5rem;
+    z-index: 5000;
+}
+
+#connection-info>* {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+#connection-info[state="1"] {
+    background-color: #DC0;
+}
+
+#connection-info[state="2"] {
+    background-color: #2E2;
+}
+
+#connection-info[state="3"] {
+    background-color: #B44;
+}
+
+#connection-info>#top-disconnect {
+    display: none;
+}
+
+#connection-info[state="2"]>#top-disconnect {
+    display: initial;
+}

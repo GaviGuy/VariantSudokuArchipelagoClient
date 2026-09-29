@@ -1,0 +1,29 @@
+#chat {
+    width: 100%;
+    border: 2px solid #555;
+}
+
+#chat-log {
+    width: 100%;
+    max-width: calc(100vw - 20rem);
+    height: 12rem;
+    overflow-y: scroll;
+    border-bottom: 2px solid #555;
+}
+
+#chat-log>* {
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    border-top: 1px solid #555;
+    overflow-x: clip;
+    padding-top: 1px;
+    padding-bottom: 3px;
+}
+
+#chat-input {
+    width: calc(100% - 10rem);
+}
+
+#chat-send {
+    width: 9rem;
+}

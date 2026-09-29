@@ -8,19 +8,45 @@
 
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 
-    <link rel="stylesheet" type="text/css" href="Styles/main.css">
-    <link rel="stylesheet" type="text/css" href="Styles/tabs.css">
-    <link rel="stylesheet" type="text/css" href="Styles/puzzleList.css">
-    <script defer type="text/javascript" src="Scripts/main.js"></script>
-    <script defer type="text/javascript" src="Scripts/tabs.js"></script>
-    <script defer type="text/javascript" src="Scripts/puzzleList.js"></script>
+    <link rel="stylesheet" type="text/css" href="Styles/Main.css">
+    <link rel="stylesheet" type="text/css" href="Styles/ConnectionMenu.css">
+    <link rel="stylesheet" type="text/css" href="Styles/TopBar.css">
+    <link rel="stylesheet" type="text/css" href="Styles/Tabs.css">
+    <link rel="stylesheet" type="text/css" href="Styles/PuzzleList.css">
+    <link rel="stylesheet" type="text/css" href="Styles/TextChat.css">
+    <script type="module" src="Scripts/Archipelago.js"></script>
+    <script defer type="text/javascript" src="Scripts/Main.js"></script>
+    <script defer type="text/javascript" src="Scripts/TopMenu.js"></script>
+    <script defer type="text/javascript" src="Scripts/Tabs.js"></script>
+    <script defer type="text/javascript" src="Scripts/PuzzleList.js"></script>
 </head>
 <body>
     <div id="connection-info">
-        <div id="connection-status">
-            Not connected.
-            <input>
+        <span id="top-text">Not currently connected</span>
+        <button id="top-disconnect">Disconnect</button>
+    </div>
+    <div id="top-menu" state="0">
+        <div>
+            <div id="connection-panel">
+                <div>
+                    <label for="input-address">Address and Port: </label>
+                    <input type="text" id="input-address" placeholder="address:port" value="archipelago.gg:38281"></input>
+                </div>
+                <div>
+                    <label for="input-username">Username: </label>
+                    <input type="text" id="input-username"></input>
+                </div>
+                <div>
+                    <label for="input-password">Password: </label>
+                    <input type="password" id="input-password"></input>
+                </div>
+                <div>
+                    <button id="controls-connect">Connect</button>
+                    <button id="controls-disconnect" disabled>Disconnect</button>
+                </div>
+            </div>
         </div>
+        <button id="top-arrow">Connection Info</button>
     </div>
     <div id="tab-body">
         <div id="tab-buttons">
@@ -39,6 +65,11 @@
             </div>
             <div id="tab2">
                 AP text client
+                <div id="chat">
+                    <div id="chat-log"></div>
+                    <input id="chat-input"></input>
+                    <button id="chat-send">Send Message</button>
+                </div>
             </div>
         </div>
     </div>
