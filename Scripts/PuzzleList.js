@@ -3,6 +3,7 @@
 function loadPuzzles() {
     fetchJSONData().then(data => {
         console.log(data);
+        //todo: clearing the list is horrible for continuity, removing typed fields, etc
         let listElem = document.getElementById("tab1-list");
         listElem.innerHTML = "";
         for(let i = 0; i < data.puzzles.length; i++) {
@@ -33,7 +34,7 @@ function createPuzzleCard(puzzle) {
     let solutionElem = document.createElement("div");
     
     let solutionHintElem = document.createElement("div");
-    solutionHintElem.innerText = puzzle.solutionHint;
+    solutionHintElem.innerText = "Solution code: " + puzzle.solutionHint;
     solutionElem.appendChild(solutionHintElem);
 
     let solutionInput = document.createElement("input");
@@ -57,7 +58,7 @@ function createPuzzleCard(puzzle) {
 
 // lifted from geeksforgeeks
 function fetchJSONData() {
-    return fetch('./puzzles.json')
+    return fetch('./Assets/Puzzles.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);

@@ -1,0 +1,74 @@
+Some things NEED to be given during submission
+* puzzle link(s)
+* solution code
+* hints (optional)
+
+There's a bit of metadata I maybe want to scan the page for:
+* quality rating
+* star rating
+* solve count
+* publication time
+* solution code hint
+
+Some things should be given, but will resort to fallbacks if excluded
+* duration - if not given, will be assumed from star rating
+* tags - logicmasters page might lack them, so I figured I'd ask for them just in case
+* 
+
+
+YAML settings and generation:
+    End goal is to solve the boss puzzle
+
+    How many puzzles should there be? (excluding pillars and the boss)
+    (default 10)
+
+    How hard should the boss be?
+    (default 3)
+
+    How to unlock the boss?
+    * found randomly, just like any other puzzle
+    * (default) unlocked by solving n other puzzles
+    * unlocked by solving all n pillar puzzles
+
+    if n puzzle unlock, how many puzzles to unlock? expressed as a percentage of non-boss puzzles
+    (default 50)
+
+    if n pillar puzzles,
+        how hard should they be, in stars
+        (default 2)
+
+        how many should there be
+        (note: pillars exist ON TOP OF the base number of puzzles)
+        (default 4)
+    
+    for all other puzzles,
+        minimum diff
+        (default 1)
+
+        maximum diff
+        (default 1)
+
+        diff distribution
+        * random - tier distribution is left up to chance         eg. ⡆⡀⡄⡇⡀
+        * flat - all allowed ratings show up roughly equally      eg. ⡄⡄⡄⡄⡄
+        * bell - most puzzles near the center of the range        eg. ⡀⡄⡇⡄⡀
+        * exponential - each tier is roughly 50% of the previous  eg. ⡇⡄⡀⡀⡀
+
+        minimum length
+        (default none)
+        
+        maximum length
+        (default 1 hour, however that's expressed)
+
+    for all filler items
+        ratio of puzzle auto-solves
+        (default 1)
+
+        ratio of hints (assuming I have a hint system)
+        (default 2)
+
+        ratio of puzzle rerolls (will roll from an easier pool)
+        (default 2)
+
+    excluded tags
+    (default none)
