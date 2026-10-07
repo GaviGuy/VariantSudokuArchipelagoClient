@@ -1,6 +1,13 @@
 #top-menu {
+    display: block;
     padding: 2rem;
     padding-top: 1rem;
+}
+
+#top-menu>* {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 #top-menu[state="0"] {
@@ -35,7 +42,7 @@
 }
 
 #connection-panel {
-    height: 12rem;
+    height: 5rem;
 }
 
 #connection-panel>div {
@@ -50,7 +57,7 @@
 #top-arrow {
     display: block;
     position: fixed;
-    top: 16rem;
+    top: 9.5rem;
     margin-left: 4rem;
     margin-top: 0.5rem;
 }
