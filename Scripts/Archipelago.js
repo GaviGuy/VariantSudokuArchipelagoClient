@@ -1,7 +1,10 @@
 import { Client } from "https://unpkg.com/archipelago.js/dist/archipelago.min.js";
 
-const client = new Client();
-let slotData, address, username, connected;
+export let client = new Client();
+export let localItems = [];
+export let slotData, address, username, connected;
+
+import updatePuzzleList from "./PuzzleList.js";
 
 
 
@@ -38,24 +41,30 @@ function initialize() {
     console.log("gmorning");
     initDebugHotkeys();
 
+    //initialize tab controls
+    const TABS = document.getElementById("tab-buttons");
+    for(let i = 0; i < TABS.children.length; i++) {
+        TABS.children[i].addEventListener("click", () => {setTab(i)});
+    }
+
     //initialize login controls
     document.getElementById("controls-connect").addEventListener("click",
-        () => handleLogin());
+        () => login());
     document.getElementById("input-address").addEventListener("keyup",
         (e) => {
             if(updateConnectButton() && e.key === "Enter" || e.keyCode === 13)
-                handleLogin();
-        });
+                login();
+    });
     document.getElementById("input-username").addEventListener("keyup",
         (e) => {
             if(updateConnectButton() && e.key === "Enter" || e.keyCode === 13)
-                handleLogin();
-        });
+                login();
+    });
     document.getElementById("input-password").addEventListener("keyup",
         (e) => {
             if(updateConnectButton() && e.key === "Enter" || e.keyCode === 13)
-                handleLogin();
-        });
+                login();
+    });
     document.getElementById("top-disconnect").addEventListener("click",
         () => disconnect());
     document.getElementById("controls-disconnect").addEventListener("click",
@@ -109,16 +118,6 @@ function updateConnectButton() {
     document.getElementById("controls-connect").setAttribute("disabled", 1);
 }
 
-function handleLogin() {
-    let address = document.getElementById("input-address").value;
-    let username = document.getElementById("input-username").value;
-    let password = document.getElementById("input-password").value;
-
-    if(!address || !username) return;
-
-    login(address, username, password);
-}
-
 function disconnect() {
     updateForDisconnect();
     client.login().catch(()=>{});
@@ -135,26 +134,43 @@ function updateForDisconnect() {
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
 }
 
-function login(adr, usrnm, password) {
+function login() {
+    let addressIn = document.getElementById("input-address").value;
+    let usernameIn = document.getElementById("input-username").value;
+    let passwordIn = document.getElementById("input-password").value;
+
+    if(!addressIn || !usernameIn) return;
+
     disconnect();
     updateTopBar(topBarStates.connecting, "Connecting...")
     console.log("logging in...");
 
     const options = {};
-    if(password) options.password = password;
+    if(passwordIn) options.password = passwordIn;
 
-    client.login(adr, usrnm, "Noita", options)
+    client = new Client();
+    client.login(addressIn, usernameIn, "Noita", options)
         .then((val) => {
             slotData = val;
-            address = adr;
-            username = usrnm;
+            address = addressIn;
+            username = usernameIn;
             connected = true;
             console.log(slotData);
             document.getElementById("controls-disconnect").removeAttribute("disabled");
             setTopMenuState(menuStates.collapsed);
-            updateTopBar(topBarStates.connected, `Connected to ${adr} as ${usrnm}`);
-            // generateCourseSelect();
-            // changeContentWindow(contentWindows.courseSelect);
+            updateTopBar(topBarStates.connected, `Connected to ${addressIn} as ${usernameIn}`);
+
+            (() => {
+                for(let i = 0; i < client.items.received.length; i++) {
+                    let item = client.items.received[i];
+                    localItems.push({
+                        id: item.id,
+                        name: item.name,
+                    });
+                }
+                console.warn(localItems);
+            })();
+            updatePuzzleList();
 
         })
         .catch((e) => {
@@ -169,6 +185,10 @@ function login(adr, usrnm, password) {
             else
                 updateTopBar(topBarStates.error, `Failed to connect to server`);
         });
+}
+
+function syncItems() {
+
 }
 
 window.onerror = () => {

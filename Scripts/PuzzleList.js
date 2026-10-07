@@ -1,15 +1,29 @@
+import {client, localItems, slotData} from "./Archipelago.js";
 
+const PUZZLES_DATABASE = await (async () => {
+    return fetch('./Assets/Puzzles.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => console.error('Failed to load puzzle list:', error));
+})();
+const PUZZLES = PUZZLES_DATABASE.puzzles;
 
-function loadPuzzles() {
-    fetchJSONData().then(data => {
-        console.log(data);
-        //todo: clearing the list is horrible for continuity, removing typed fields, etc
-        let listElem = document.getElementById("tab1-list");
-        listElem.innerHTML = "";
-        for(let i = 0; i < data.puzzles.length; i++) {
-            listElem.appendChild(createPuzzleCard(data.puzzles[i]));
-        }
-    });
+function updatePuzzleList() {
+    let nItems = 0;
+    for(let i = 0; i < localItems.length; i++) {
+        if(localItems[i].name === "Extra Max HP") nItems++;
+    }
+
+    //todo: clearing the list is horrible for continuity, removing typed fields, etc
+    let listElem = document.getElementById("tab1-list");
+    listElem.innerHTML = "";
+    for(let i = 0; i < Math.min(PUZZLES.length, nItems); i++) {
+        listElem.appendChild(createPuzzleCard(PUZZLES[i]));
+    }
 }
 
 function createPuzzleCard(puzzle) {
@@ -56,14 +70,4 @@ function createPuzzleCard(puzzle) {
     return retElem;
 }
 
-// lifted from geeksforgeeks
-function fetchJSONData() {
-    return fetch('./Assets/Puzzles.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();  
-        })
-        .catch(error => console.error('Failed to fetch data:', error)); 
-}
+export default updatePuzzleList;

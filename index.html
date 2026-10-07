@@ -15,10 +15,10 @@
     <link rel="stylesheet" type="text/css" href="Styles/PuzzleList.css">
     <link rel="stylesheet" type="text/css" href="Styles/TextChat.css">
     <script type="module" src="Scripts/Archipelago.js"></script>
+    <script type="module" src="Scripts/PuzzleList.js"></script>
     <script defer type="text/javascript" src="Scripts/Main.js"></script>
     <script defer type="text/javascript" src="Scripts/TopMenu.js"></script>
     <script defer type="text/javascript" src="Scripts/Tabs.js"></script>
-    <script defer type="text/javascript" src="Scripts/PuzzleList.js"></script>
 </head>
 <body>
     <div id="connection-info">
@@ -30,7 +30,8 @@
             <div id="connection-panel">
                 <div>
                     <label for="input-address">Address and Port: </label>
-                    <input type="text" id="input-address" placeholder="address:port" value="archipelago.gg:38281"></input>
+                    <input type="text" id="input-address"
+                        placeholder="address:port" value="archipelago.gg:38281"></input>
                 </div>
                 <div>
                     <label for="input-username">Username: </label>
@@ -50,9 +51,9 @@
     </div>
     <div id="tab-body">
         <div id="tab-buttons">
-            <button onclick="setTab(0)" class="active">Dashboard</button>
-            <button onclick="setTab(1)">Puzzle List</button>
-            <button onclick="setTab(2)">AP Chat</button>
+            <button class="active">Dashboard</button>
+            <button>Puzzle List</button>
+            <button>AP Chat</button>
         </div>
         <div id="tab-contents">
             <div id="tab0" class="active">
