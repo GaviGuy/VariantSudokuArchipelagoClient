@@ -69,6 +69,8 @@ function initialize() {
         () => disconnect());
     document.getElementById("controls-disconnect").addEventListener("click",
         () => disconnect());
+    document.getElementById("controls-censor").addEventListener("click",
+        () => toggleCensor(connected, address, username));
         
     // initialize chat controls
     document.getElementById("chat-input").addEventListener("keyup",
