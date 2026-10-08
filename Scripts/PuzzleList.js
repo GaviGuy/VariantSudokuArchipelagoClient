@@ -1,7 +1,7 @@
 import {client, localItems, slotData} from "./Archipelago.js";
 
-const PUZZLES_DATABASE = await (async () => {
-    return fetch('./Assets/Puzzles.json')
+async function getJson(path) {
+    return fetch(path)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -9,10 +9,16 @@ const PUZZLES_DATABASE = await (async () => {
             return response.json();
         })
         .catch(error => console.error('Failed to load puzzle list:', error));
-})();
+}
+
+const PUZZLES_DATABASE = await getJson("./Assets/Puzzles.json");
 const PUZZLES = PUZZLES_DATABASE.puzzles;
 
+const TAGS_DATABASE = await getJson("./Assets/Tags.json");
+const TAGS = TAGS_DATABASE.tags;
+
 function updatePuzzleList() {
+    console.log(TAGS);
     let nItems = 0;
     for(let i = 0; i < localItems.length; i++) {
         if(localItems[i].name === "Extra Max HP") nItems++;
@@ -32,8 +38,9 @@ function createPuzzleCard(puzzle) {
 
     let topElem = document.createElement("div");
 
-    let titleElem = document.createElement("span");
+    let titleElem = document.createElement("a");
     titleElem.classList.add("puzzle-title");
+    titleElem.setAttribute("href", puzzle.link);
     titleElem.innerText = puzzle.title;
     topElem.appendChild(titleElem);
 
@@ -58,9 +65,23 @@ function createPuzzleCard(puzzle) {
 
     let tagsElem = document.createElement("div");
     tagsElem.classList.add("tab1-tags");
+
+    let lookupTag = (tag) => {
+        for(let i in TAGS) {
+            if(tag == TAGS[i].id) return TAGS[i];
+        }
+    };
     for(let i = 0; i < puzzle.tags.length; i++) {
         let elem = document.createElement("span");
-        elem.innerText= puzzle.tags[i];
+        let tag = lookupTag(puzzle.tags[i]);
+        if(!tag) {
+            elem.innerText = puzzle.tags[i];
+            elem.setAttribute("title", "Unknown tag");
+        }
+        else {
+            elem.innerText = tag.name;
+            elem.setAttribute("title", tag.name + "\n" + tag.desc);
+        }
         tagsElem.appendChild(elem);
     }
     bottomElem.appendChild(tagsElem);

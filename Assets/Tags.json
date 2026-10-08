@@ -1,0 +1,153 @@
+{
+    "vers": "0.1",
+    "tags": [
+        {
+            "id": "vanilla",
+            "name": "Vanilla",
+            "desc": "Ordinary sudoku. No other rules apply"
+        },
+        {
+            "id": "kropkiBlack",
+            "name": "Black Kropki",
+            "desc": "Digits seperated by a black kropki dot must differ in a 1:2 ratio",
+            "neg": "All black kropki dots are given"
+        },
+        {
+            "id": "kropkiWhite",
+            "name": "White Kropki",
+            "desc": "Digits seperated by a white kropki dot must differ by 1",
+            "neg": "All white kropki dots are given"
+        },
+        {
+            "id": "killerCage",
+            "name": "Killer Cage",
+            "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage"
+        },
+        {
+            "id": "littleKiller",
+            "name": "Little Killer",
+            "desc": "Arrowed numbers outside the grid denote the sum of all cells along their pointed lines"
+        },
+        {
+            "id": "fiveTen",
+            "name": "V and X Sums",
+            "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
+            "neg": "All V's and X's are given"
+        },
+        {
+            "id": "arrow",
+            "name": "Arrow",
+            "desc": "The digits on an arrow sum to the value in the attached circle"
+        },
+        {
+            "id": "antiknight",
+            "name": "Anti-Knight",
+            "desc": "A digit can't be within a chess knight's move of itself"
+        },
+        {
+            "id": "antiking",
+            "name": "Anti-King",
+            "desc": "A digit can't be within a chess king's move of itself"
+        },
+        {
+            "id": "renban",
+            "name": "Renban",
+            "desc": "Digits on a pink renban line can't repeat and must form a continuous, consecutive set"
+        },
+        {
+            "id": "germanWhisper",
+            "name": "German Whisper",
+            "desc": "Adjacent digits on a green whisper line must differ by 5 or more"
+        },
+        {
+            "id": "otherWhisper",
+            "name": "Whisper",
+            "desc": "Adjacent digits on a whisper line must differ by a given amount"
+        },
+        {
+            "id": "regionSum",
+            "name": "Region Sum",
+            "desc": "Region borders divide a region sum line into segments. Each segment's digits must sum to the same value"
+        },
+        {
+            "id": "parity",
+            "name": "Parity Line",
+            "desc": "Adjacent digits on a parity line must be odd and even"
+        },
+        {
+            "id": "entropy",
+            "name": "Entropy Line",
+            "desc": "Any set of 3 adjacent cells on an entropy line must contain a low (1-3), medium (4-6), and high (7-9) digit"
+        },
+        {
+            "id": "modular",
+            "name": "Modular Line",
+            "desc": "Any set of 3 adjacent cells on a modular line must have a unique remainder when divided by 3"
+        },
+        {
+            "id": "palindrome",
+            "name": "Palindrome Line",
+            "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards"
+        },
+        {
+            "id": "irregular",
+            "name": "Irregular",
+            "desc": "Regions boundaries are irregularly shaped"
+        },
+        {
+            "id": "chaosConstruct",
+            "name": "Chaos Construction",
+            "desc": "Region boundaries are irregularly shaped and must be deduced by the solver"
+        },
+        {
+            "id": "fastThermo",
+            "name": "Thermometer",
+            "desc": "Digits on a thermometer must strictly increase from bulb to tip"
+        },
+        {
+            "id": "slowThermo",
+            "name": "Slow Thermometer",
+            "desc": "Digits on a thermometer must not decrease from bulb to tip"
+        },
+        {
+            "id": "skyscraper",
+            "name": "Skyscraper",
+            "desc": "Numbers outside the grid indicate how many digits are visible when looking into the grid. Digits block visibility of lower digits behind them"
+        },
+        {
+            "id": "modCells",
+            "name": "Modifier Cells",
+            "desc": "Some cells have a different value than the digit they contain"
+        },
+        {
+            "id": "path",
+            "name": "Pathing",
+            "desc": "The solver must draw a path or loop based on some criteria"
+        },
+        {
+            "id": "shade",
+            "name": "Shading",
+            "desc": "The solver must color cells based on some criteria"
+        },
+        {
+            "id": "miscPos",
+            "name": "Position Clue",
+            "desc": "There's a unique clue that can determine cell values based on their position"
+        },
+        {
+            "id": "miscMath",
+            "name": "Math Clue",
+            "desc": "There's a unique clue that can determine cell values based on math"
+        },
+        {
+            "id": "miscPattern",
+            "name": "Math Clue",
+            "desc": "There's a unique clue that can determine cell values based on a pattern"
+        },
+        {
+            "id": "misc",
+            "name": "Unique",
+            "desc": "The main component of this puzzle can't be explained with existing tags"
+        }
+    ]
+}

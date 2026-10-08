@@ -1,6 +1,6 @@
 import { Client } from "https://unpkg.com/archipelago.js/dist/archipelago.min.js";
 
-export let client = new Client();
+export const client = new Client();
 export let localItems = [];
 export let slotData, address, username, connected;
 
@@ -148,7 +148,6 @@ function login() {
     const options = {};
     if(passwordIn) options.password = passwordIn;
 
-    client = new Client();
     client.login(addressIn, usernameIn, "Noita", options)
         .then((val) => {
             slotData = val;

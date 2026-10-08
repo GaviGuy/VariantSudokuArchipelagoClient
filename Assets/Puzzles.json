@@ -1,5 +1,6 @@
 {
     "vers": "0.0",
+    "tagsVers": "0.1",
     "puzzles": [
         {
             "title": "puzzle title",
@@ -7,7 +8,7 @@
             "link": "https://wawa.wawa/wawa",
             "rating": 1,
             "duration": 5,
-            "tags": ["littleKillers", "thermometer", "chaos construction"],
+            "tags": ["littleKiller", "fastThermo", "chaosConstruct"],
             "hints": ["idk if i'm actually gonna have hints just yet"],
             "solutionHint": "Digits in row 7, left to right",
             "solutionCode": "123456789"
@@ -22,7 +23,17 @@
             "hints": ["2"],
             "solutionHint": "the number 2, 9 times",
             "solutionCode": "222222222"
+        },
+        {
+            "title": "Serial Sums",
+            "author": "kyuquu",
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MDP",
+            "rating": 1,
+            "duration": 1,
+            "tags": ["renban", "kropkiBlack", "kropkiWhite", "killerCage"],
+            "hints": ["2"],
+            "solutionHint": "Row 8 (left to right)",
+            "solutionCode": "791432865"
         }
-
     ]
 }
