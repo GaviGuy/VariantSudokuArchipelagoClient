@@ -120,6 +120,11 @@
             "desc": "Some cells have a different value than the digit they contain"
         },
         {
+            "id": "differentDigits",
+            "name": "Unusual Digits",
+            "desc": "Puzzle uses different digits than usual"
+        },
+        {
             "id": "path",
             "name": "Pathing",
             "desc": "The solver must draw a path or loop based on some criteria"
@@ -130,19 +135,29 @@
             "desc": "The solver must color cells based on some criteria"
         },
         {
+            "id": "evenOdd",
+            "name": "Even & Odd",
+            "desc": "There's a clue that dictates some cells be odd or even"
+        },
+        {
+            "id": "fog",
+            "name": "Dynamic Fog",
+            "desc": "The grid is partially obscured by fog that clears as digits are placed"
+        },
+        {
             "id": "miscPos",
             "name": "Position Clue",
-            "desc": "There's a unique clue that can determine cell values based on their position"
+            "desc": "There's a unique clue that limits cell values based on their position"
         },
         {
             "id": "miscMath",
             "name": "Math Clue",
-            "desc": "There's a unique clue that can determine cell values based on math"
+            "desc": "There's a unique clue that limits cell values based on math"
         },
         {
             "id": "miscPattern",
-            "name": "Math Clue",
-            "desc": "There's a unique clue that can determine cell values based on a pattern"
+            "name": "Pattern Clue",
+            "desc": "There's a unique clue that limits cell values based on a pattern"
         },
         {
             "id": "misc",
