@@ -112,6 +112,19 @@ client.messages.on("message", (content) => {
     printChatMessage(content);
 });
 
+client.items.on("itemsReceived", (h) => {
+    if(!connected) return
+    console.warn("got a new item: " + h);
+    for(let i = localItems.length; i < client.items.received.length; i++) {
+        let item = client.items.received[i];
+        localItems.push({
+            id: item.id,
+            name: item.name,
+        });
+    }
+    updatePuzzleList()
+});
+
 function updateConnectButton() {
     if(document.getElementById("input-address").value && document.getElementById("input-username").value) {
         document.getElementById("controls-connect").removeAttribute("disabled");
@@ -132,7 +145,6 @@ function updateForDisconnect() {
     username = null;
     connected = false;
     setTopMenuState(menuStates.fixed);
-    // changeContentWindow(contentWindows.blank);
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
 }
 
@@ -150,7 +162,7 @@ function login() {
     const options = {};
     if(passwordIn) options.password = passwordIn;
 
-    client.login(addressIn, usernameIn, "Noita", options)
+    client.login(addressIn, usernameIn, "Variant Sudoku", options)
         .then((val) => {
             slotData = val;
             address = addressIn;
@@ -161,16 +173,15 @@ function login() {
             setTopMenuState(menuStates.collapsed);
             updateTopBar(topBarStates.connected, `Connected to ${addressIn} as ${usernameIn}`);
 
-            (() => {
-                for(let i = 0; i < client.items.received.length; i++) {
-                    let item = client.items.received[i];
-                    localItems.push({
-                        id: item.id,
-                        name: item.name,
-                    });
-                }
-                console.warn(localItems);
-            })();
+            localItems = []
+            for(let i = 0; i < client.items.received.length; i++) {
+                let item = client.items.received[i];
+                localItems.push({
+                    id: item.id,
+                    name: item.name,
+                });
+            }
+            console.warn(localItems);
             updatePuzzleList();
 
         })

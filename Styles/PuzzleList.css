@@ -6,6 +6,24 @@
     padding: 0.5em;
 }
 
+.filler {
+    background-color: #9BF;
+    color: #052;
+    border-color: #052;
+}
+
+.pillar {
+    background-color: #FC9;
+    color: #025;
+    border-color: #025;
+}
+
+.boss {
+    background-color: #F99;
+    color: #400;
+    border-color: #400;
+}
+
 .puzzle-title {
     font-weight: bold;
     font-size: 1.5em;

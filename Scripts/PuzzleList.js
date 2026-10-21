@@ -18,22 +18,32 @@ const TAGS_DATABASE = await getJson("./Assets/Tags.json");
 const TAGS = TAGS_DATABASE.tags;
 
 function updatePuzzleList() {
-    console.log(TAGS);
-    let nItems = 0;
-    for(let i = 0; i < localItems.length; i++) {
-        if(localItems[i].name === "Extra Max HP") nItems++;
-    }
-
     //todo: clearing the list is horrible for continuity, removing typed fields, etc
     let listElem = document.getElementById("tab1-list");
     listElem.innerHTML = "";
-    for(let i = 0; i < Math.min(PUZZLES.length, nItems); i++) {
-        listElem.appendChild(createPuzzleCard(PUZZLES[i]));
+    for(let i = 0; i < localItems.length; i++) {
+        if(localItems[i].id >= 1000) {
+            let type = 0;
+            if(slotData["bossUnlock"] == 2 && slotData["pillarIds"].includes(localItems[i].id)) {
+                type = 1;
+            }
+
+            listElem.appendChild(createPuzzleCard(PUZZLES[localItems[i].id-1000], type));
+        }
+    }
+
+    // boss unlock must be shown manually, it's not a received item
+    if(true == true) {
+        console.warn("displaying boss puzzle");
+        listElem.appendChild(createPuzzleCard(PUZZLES[slotData["bossId"]-1000], 2));
     }
 }
 
-function createPuzzleCard(puzzle) {
+function createPuzzleCard(puzzle, puzzleType) {
+    const PUZZLE_CLASSES = ["filler", "pillar", "boss"];
+
     let retElem = document.createElement("div");
+    retElem.classList.add(PUZZLE_CLASSES[puzzleType])
     retElem.classList.add("puzzle-container");
 
     let topElem = document.createElement("div");
