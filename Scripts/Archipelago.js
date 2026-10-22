@@ -3,6 +3,7 @@ import { Client } from "https://unpkg.com/archipelago.js/dist/archipelago.min.js
 export const client = new Client();
 export let localItems = [];
 export let slotData, address, username, connected;
+export let debugMode = false;
 
 import updatePuzzleList from "./PuzzleList.js";
 
@@ -12,27 +13,9 @@ function initDebugHotkeys() {
     document.addEventListener("keydown", (e) => {
         if (e.ctrlKey && e.key === "1") {
             e.preventDefault();
-            setTopMenuState(0);
-        }
-        else if (e.ctrlKey && e.key === "2") {
-            e.preventDefault();
-            setTopMenuState(1);
-        }
-        else if (e.ctrlKey && e.key === "3") {
-            e.preventDefault();
-            setTopMenuState(2);
-        }
-        else if (e.ctrlKey && e.key === "4") {
-            e.preventDefault();
-            const packet = {
-                cmd: "Get",
-                keys: ["_read_slot_data_0"],
-            };
-            fetch("https://localhost:38281/GetPacket", packet)
-                .then((e) => {
-                    console.log(e.status);
-                    console.log(e);
-                });
+            debugMode = !debugMode;
+            //console.log(`${debugMode ? "enabling" : "disabling"} debug mode`);
+            updatePuzzleList();
         }
     });
 }
@@ -108,8 +91,26 @@ function sendChatMessage() {
     chatBar.value = "";
 }
 
+export function sendLocations(puzzle) {
+    if(puzzle.id == slotData["bossId"] - 1000) {
+        console.warn("goaled!");
+        client.goal();
+    }
+    else {
+        for(let i = 0; i < puzzle.rating; i++) {
+            let locId = 1000 + puzzle.id * 10 + i
+            console.log("attempted to send location id: " + locId);
+            client.check(locId);
+        }
+    }
+}
+
 client.messages.on("message", (content) => {
     printChatMessage(content);
+});
+
+client.messages.on("itemSent", (content) => {
+    printChatMessage("sent: " + content);
 });
 
 client.items.on("itemsReceived", (h) => {

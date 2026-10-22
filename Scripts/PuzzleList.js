@@ -1,4 +1,4 @@
-import {client, localItems, slotData} from "./Archipelago.js";
+import {debugMode, client, localItems, slotData, sendLocations} from "./Archipelago.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -28,18 +28,26 @@ function updatePuzzleList() {
                 type = 1;
             }
 
-            listElem.appendChild(createPuzzleCard(PUZZLES[localItems[i].id-1000], type));
+            listElem.appendChild(createPuzzleCard(PUZZLES[(localItems[i].id - 1000) / 10], type));
         }
     }
 
     // boss unlock must be shown manually, it's not a received item
-    if(true == true) {
-        console.warn("displaying boss puzzle");
+    if("boss unlocked" == true) {
+        // console.warn("displaying boss puzzle");
         listElem.appendChild(createPuzzleCard(PUZZLES[slotData["bossId"]-1000], 2));
     }
 }
 
-function createPuzzleCard(puzzle, puzzleType) {
+function checkSolution(puzzle, solution) {
+    if(puzzle.solutionCode == solution)
+        return true;
+    return false;
+}
+
+
+
+function createPuzzleCard(puzzle, puzzleType, solved) {
     const PUZZLE_CLASSES = ["filler", "pillar", "boss"];
 
     let retElem = document.createElement("div");
@@ -69,7 +77,29 @@ function createPuzzleCard(puzzle, puzzleType) {
     solutionElem.appendChild(solutionHintElem);
 
     let solutionInput = document.createElement("input");
+    solutionInput.addEventListener("keyup", (e) => {
+        if(e.key === "Enter") {
+            let code = solutionInput.value;
+            if(checkSolution(puzzle, code)) {
+                console.warn("correct solution: " + code);
+                sendLocations(puzzle)
+            }
+            else {
+                console.warn("incorrect solution: " + code);
+            }
+        }
+    });
     solutionElem.appendChild(solutionInput);
+
+    // debug autosolve button
+    if(debugMode) {
+        let autosolve = document.createElement("button");
+        autosolve.textContent = "h";
+        autosolve.addEventListener("click", () => {
+            sendLocations(puzzle);
+        });
+        solutionElem.appendChild(autosolve);
+    }
 
     bottomElem.appendChild(solutionElem);
 

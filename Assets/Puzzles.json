@@ -6,6 +6,7 @@
         {
             "title": "Serial Sums",
             "author": "kyuquu",
+            "id": 0,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MDP",
             "rating": 1,
             "duration": "22:38",
@@ -17,6 +18,7 @@
         {
             "title": "Hungry Sevens",
             "author": "kyuquu",
+            "id": 1,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MEA",
             "rating": 1,
             "duration": "9:58",
@@ -28,6 +30,7 @@
         {
             "title": "Whirlwind",
             "author": "kyuquu",
+            "id": 2,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MJQ",
             "rating": 2,
             "duration": "26:16",
@@ -39,6 +42,7 @@
         {
             "title": "A Few Odd Sums",
             "author": "kyuquu",
+            "id": 3,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N5J",
             "rating": 1,
             "duration": "27:15",
@@ -50,6 +54,7 @@
         {
             "title": "Cinna-mod Rolls",
             "author": "kyuquu + Gavi Guy",
+            "id": 4,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N8L",
             "rating": 2,
             "duration": "34:59",
@@ -61,6 +66,7 @@
         {
             "title": "Modular Fog",
             "author": "kyuquu",
+            "id": 5,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NCH",
             "rating": 1,
             "duration": "12:42",
@@ -72,6 +78,7 @@
         {
             "title": "Superimposed Sums",
             "author": "kyuquu",
+            "id": 6,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NPL",
             "rating": 2,
             "duration": "25:37",
@@ -83,6 +90,7 @@
         {
             "title": "Angled Sets",
             "author": "kyuquu",
+            "id": 7,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NY3",
             "rating": 3,
             "duration": "84:43",
@@ -94,6 +102,7 @@
         {
             "title": "Synergistic Sums",
             "author": "kyuquu",
+            "id": 8,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000PQJ",
             "rating": 1,
             "duration": "33:02",
@@ -105,6 +114,7 @@
         {
             "title": "Centerpiece",
             "author": "kyuquu",
+            "id": 9,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000Q5W",
             "rating": 3,
             "duration": "66:12",
@@ -112,6 +122,15 @@
             "hints": [],
             "solutionHint": "Column 9 (top to bottom)",
             "solutionCode": "915876342"
+        }
+    ],
+    "otherpuzzles": [
+        {
+            "title": "Killer Rows",
+            "author": "Yawnus",
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000VGO",
+            "rating": 4,
+            "solutionCode": "216839574"
         }
     ]
 }
