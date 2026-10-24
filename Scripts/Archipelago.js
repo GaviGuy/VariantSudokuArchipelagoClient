@@ -111,7 +111,8 @@ export function sendLocations(puzzle) {
     else {
         for(let i = 0; i < puzzle.rating; i++) {
             let locId = 1000 + puzzle.id * 10 + i
-            console.log("attempted to send location id: " + locId);
+            if(debugMode)
+                console.log("attempted to send location id: " + locId);
             client.check(locId);
         }
         checkBonus();
@@ -187,6 +188,11 @@ client.messages.on("message", (content) => {
 
 client.messages.on("itemSent", (content) => {
     //printChatMessage("sent: " + content);
+});
+
+client.room.on("locationsChecked", () => {
+    if(!connected) return;
+    updatePuzzleList();
 });
 
 client.items.on("itemsReceived", (h) => {

@@ -46,16 +46,16 @@ function updatePuzzleList() {
             if(slotData["bossUnlock"] == 2 && slotData["pillarIds"].includes(localItems[i].id)) {
                 type = 1;
             }
+            let solved = client.room.checkedLocations.includes(localItems[i].id)
 
-            listElem.appendChild(createPuzzleCard(PUZZLES[(localItems[i].id - 1000) / 10], type));
+            listElem.appendChild(createPuzzleCard(PUZZLES[(localItems[i].id - 1000) / 10], type, solved));
         }
     }
 
     // boss unlock must be shown manually, it's not a received item
-    //todo: implement boss unlock conditions
     if(canAccessBoss()) {
-        // console.warn("displaying boss puzzle");
-        listElem.appendChild(createPuzzleCard(PUZZLES[(slotData.bossId - 1000) / 10], 2));
+        let solved = client.room.checkedLocations.includes(slotData.bossId);
+        listElem.appendChild(createPuzzleCard(PUZZLES[(slotData.bossId - 1000) / 10], 2, solved));
     }
 }
 
@@ -83,8 +83,10 @@ function canAccessBoss() {
 }
 
 function checkSolution(puzzle, solution) {
-    if(puzzle.solutionCode == solution)
+    if(puzzle.solutionCode == solution) {
+        updatePuzzleList();
         return true;
+    }
     return false;
 }
 
@@ -94,6 +96,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
 
     let retElem = document.createElement("div");
     retElem.classList.add(PUZZLE_CLASSES[puzzleType])
+    if(solved) retElem.classList.add("solved");
     retElem.classList.add("puzzle-container");
 
     let topElem = document.createElement("div");
@@ -114,24 +117,31 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
 
     let solutionElem = document.createElement("div");
     
-    let solutionHintElem = document.createElement("div");
-    solutionHintElem.innerText = "Solution code: " + puzzle.solutionHint;
-    solutionElem.appendChild(solutionHintElem);
+    if(!solved) {
+        let solutionHintElem = document.createElement("div");
+        solutionHintElem.innerText = "Solution code: " + puzzle.solutionHint;
+        solutionElem.appendChild(solutionHintElem);
 
-    let solutionInput = document.createElement("input");
-    solutionInput.addEventListener("keyup", (e) => {
-        if(e.key === "Enter") {
-            let code = solutionInput.value;
-            if(checkSolution(puzzle, code)) {
-                console.warn("correct solution: " + code);
-                sendLocations(puzzle)
+        let solutionInput = document.createElement("input");
+        solutionInput.addEventListener("keyup", (e) => {
+            if(e.key === "Enter") {
+                let code = solutionInput.value;
+                if(checkSolution(puzzle, code)) {
+                    console.warn("correct solution: " + code);
+                    sendLocations(puzzle)
+                }
+                else {
+                    console.warn("incorrect solution: " + code);
+                }
             }
-            else {
-                console.warn("incorrect solution: " + code);
-            }
-        }
-    });
-    solutionElem.appendChild(solutionInput);
+        });
+        solutionElem.appendChild(solutionInput);
+    }
+    else {
+        let solvedElem = document.createElement("span");
+        solvedElem.innerText = "Solved!"
+        solutionElem.appendChild(solvedElem);
+    }
 
     // debug autosolve button
     if(debugMode) {

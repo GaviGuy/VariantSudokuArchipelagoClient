@@ -6,6 +6,12 @@
     padding: 0.5em;
 }
 
+.solved {
+    background-color: #BFB !important;
+    color: #015 !important;
+    border-color: #015 !important;
+}
+
 .filler {
     background-color: #9BF;
     color: #052;
