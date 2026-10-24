@@ -104,7 +104,7 @@ function sendChatMessage() {
 }
 
 export function sendLocations(puzzle) {
-    if(puzzle.id == slotData["bossId"] - 1000) {
+    if(puzzle.id == (slotData["bossId"] - 1000) / 10) {
         console.warn("goaled!");
         client.goal();
     }
@@ -118,6 +118,17 @@ export function sendLocations(puzzle) {
     }
 }
 
+export function getNumPuzzlesSolved(checkedIds, pillarsOnly) {
+    let ret = 0;
+    for(let i = 0; i < checkedIds.length; i++) {
+        if(checkedIds[i] < 1000) continue;
+        if(checkedIds[i] % 10 != 0) continue;
+        if(pillarsOnly && !slotData.pillarIds.includes(checkedIds[i])) continue;
+        ret++;
+    }
+    return ret;
+}
+
 function checkBonus(newId) {
     let checkedIds = client.room.checkedLocations;
     checkedIds.push(newId);
@@ -125,20 +136,9 @@ function checkBonus(newId) {
     //no duplicates
     checkedIds = checkedIds.filter((item, index) => checkedIds.indexOf(item) === index);
 
-    let solves = 0;
-    for(let i = 0; i < checkedIds.length; i++) {
-        if(checkedIds[i] < 1000) continue;
-        if(checkedIds[i] % 10 != 0) continue;
-        
-        // total filler solved
-        if(slotData.bossUnlock < 2)
-            solves++;
-
-        // total pillars solved
-        else if(slotData.pillarIds.includes(checkedIds[i]))
-            solves++;
-
-    }
+    let solves = getNumPuzzlesSolved(checkedIds, false);
+    if(slotData.bossUnlock == 2)
+        solves = getNumPuzzlesSolved(checkedIds, true);
 
     let nBonus = 0;
     let mult = 2;

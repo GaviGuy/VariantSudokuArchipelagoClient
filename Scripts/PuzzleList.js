@@ -1,4 +1,4 @@
-import {debugMode, client, localItems, slotData, sendLocations} from "./Archipelago.js";
+import {debugMode, client, localItems, slotData, sendLocations, numPuzzles, getNumPuzzlesSolved} from "./Archipelago.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -53,9 +53,32 @@ function updatePuzzleList() {
 
     // boss unlock must be shown manually, it's not a received item
     //todo: implement boss unlock conditions
-    if("boss unlocked" == true) {
+    if(canAccessBoss()) {
         // console.warn("displaying boss puzzle");
-        listElem.appendChild(createPuzzleCard(PUZZLES[slotData["bossId"]-1000], 2));
+        listElem.appendChild(createPuzzleCard(PUZZLES[(slotData.bossId - 1000) / 10], 2));
+    }
+}
+
+function canAccessBoss() {
+    switch(slotData.bossUnlock) {
+        // Access the boss after getting slotData.bossUnlockCount keypieces
+        case 0:
+            console.warn("items: " + localItems);
+            if(localItems.filter(x => x.id == 1).length >= slotData.bossUnlockCount)
+                return true;
+            return false;
+
+        // Access the boss after solving slotData.bossUnlockCount puzzles
+        case 1:
+            if(getNumPuzzlesSolved(client.room.checkedLocations, false) >= slotData.bossUnlockCount)
+                return true;
+            return false;
+
+        // Access the boss after solving all puzzles in slotData.pillarIds
+        case 2:
+            if(getNumPuzzlesSolved(client.room.checkedLocations, true) >= slotData.pillarIds.length)
+                return true;
+            return false;
     }
 }
 
