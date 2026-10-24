@@ -18,9 +18,28 @@ const TAGS_DATABASE = await getJson("./Assets/Tags.json");
 const TAGS = TAGS_DATABASE.tags;
 
 function updatePuzzleList() {
+    //todo: prevent duplicates
     //todo: clearing the list is horrible for continuity, removing typed fields, etc
     let listElem = document.getElementById("tab1-list");
     listElem.innerHTML = "";
+    if(debugMode) {
+        let cheatElem = document.createElement("input");
+        cheatElem.addEventListener("keyup", (e) => {
+            if(e.key === "Enter") {
+                console.log("cheated location id: " + cheatElem.value);
+                client.check(parseInt(cheatElem.value));
+                cheatElem.value = "";
+            }
+        });
+        listElem.appendChild(cheatElem);
+
+        let debugButtonElem = document.createElement("button");
+        debugButtonElem.innerText = "debug";
+        debugButtonElem.addEventListener("click", (e) => {
+            console.log(client.room.checkedLocations);
+        });
+        listElem.appendChild(debugButtonElem);
+    }
     for(let i = 0; i < localItems.length; i++) {
         if(localItems[i].id >= 1000) {
             let type = 0;
@@ -33,6 +52,7 @@ function updatePuzzleList() {
     }
 
     // boss unlock must be shown manually, it's not a received item
+    //todo: implement boss unlock conditions
     if("boss unlocked" == true) {
         // console.warn("displaying boss puzzle");
         listElem.appendChild(createPuzzleCard(PUZZLES[slotData["bossId"]-1000], 2));
@@ -44,7 +64,6 @@ function checkSolution(puzzle, solution) {
         return true;
     return false;
 }
-
 
 
 function createPuzzleCard(puzzle, puzzleType, solved) {

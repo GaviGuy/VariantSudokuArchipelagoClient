@@ -4,6 +4,7 @@ export const client = new Client();
 export let localItems = [];
 export let slotData, address, username, connected;
 export let debugMode = false;
+export let numPuzzles = 0;
 
 import updatePuzzleList from "./PuzzleList.js";
 
@@ -18,6 +19,17 @@ function initDebugHotkeys() {
             updatePuzzleList();
         }
     });
+}
+
+function countLocations() {
+    if(!connected) return;
+
+    numPuzzles = 0;
+    for(let i = 0; i < client.room.allLocations.length; i++) {
+        let locId = client.room.allLocations[i];
+        if(locId >= 1000 && locId % 10 == 0)
+            numPuzzles++;
+    }
 }
 
 function initialize() {
@@ -102,6 +114,70 @@ export function sendLocations(puzzle) {
             console.log("attempted to send location id: " + locId);
             client.check(locId);
         }
+        checkBonus();
+    }
+}
+
+function checkBonus(newId) {
+    let checkedIds = client.room.checkedLocations;
+    checkedIds.push(newId);
+
+    //no duplicates
+    checkedIds = checkedIds.filter((item, index) => checkedIds.indexOf(item) === index);
+
+    let solves = 0;
+    for(let i = 0; i < checkedIds.length; i++) {
+        if(checkedIds[i] < 1000) continue;
+        if(checkedIds[i] % 10 != 0) continue;
+        
+        // total filler solved
+        if(slotData.bossUnlock < 2)
+            solves++;
+
+        // total pillars solved
+        else if(slotData.pillarIds.includes(checkedIds[i]))
+            solves++;
+
+    }
+
+    let nBonus = 0;
+    let mult = 2;
+    switch(slotData.bossUnlock) {
+        
+        // # of bonuses equal to slotData.bossUnlockCount (key pieces)
+        // give 2 per solve until they run out, or
+        // give enough per solve that they run out before solving all filler
+        case 0:
+            nBonus = slotData.bossUnlockCount;
+            while(numPuzzles * mult < nBonus)
+                mult++;
+            for(let i = 0; i < solves * mult; i++) {
+                client.check(200 + i)
+            }
+            break;
+
+        // # of bonuses equal to 50% of the filler puzzle count
+        // give 2 per solve until they run out
+        case 1:
+            nBonus = Math.ceil(numPuzzles / 2);
+            // TODO: does this value include the boss? it shouldn't
+            // should be trivial to subtract 1 if so
+            for(let i = 0; i < solves * mult; i++) {
+                client.check(200 + i)
+            }
+            break;
+
+        // # of bonuses based on pillar count
+        // give 2 per pillar solve, or
+        // give 1 per pillar solve if there's 4 or more pillars
+        case 2:
+            nBonus = slotData.pillarIds.length;
+            if(nBonus >= 4) mult = 1;
+
+            for(let i = 0; i < solves * mult; i++) {
+                client.check(100 + i)
+            }
+            break;
     }
 }
 
@@ -110,7 +186,7 @@ client.messages.on("message", (content) => {
 });
 
 client.messages.on("itemSent", (content) => {
-    printChatMessage("sent: " + content);
+    //printChatMessage("sent: " + content);
 });
 
 client.items.on("itemsReceived", (h) => {
@@ -183,6 +259,7 @@ function login() {
                 });
             }
             console.warn(localItems);
+            countLocations();
             updatePuzzleList();
 
         })
