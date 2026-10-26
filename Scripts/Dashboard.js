@@ -9,7 +9,18 @@ export function buildDashboard() {
         // Report current status
         let statusElem = document.createElement("div");
 
-        if(canAccessBoss()) {
+        let bossStatus = AP.puzzleStatusById(AP.slotData.bossId);
+        if(bossStatus == 3) {
+            statusElem.innerText = "Boss inaccessible but beaten ??";
+            statusElem.classList.add("bk-mode");
+        }
+
+        else if(bossStatus == 2) {
+            statusElem.innerText = "Game cleared!";
+            statusElem.classList.add("go-mode");
+        }
+
+        else if(bossStatus == 1) {
             statusElem.innerText = "Boss available!";
             statusElem.classList.add("go-mode");
         }
@@ -25,7 +36,7 @@ export function buildDashboard() {
         }
 
         else {
-            statusElem.innerText = `No puzzles available :c`;
+            statusElem.innerText = `burger king :c`;
             statusElem.classList.add("bk-mode");
         }
 
@@ -99,8 +110,34 @@ export function buildDashboard() {
             dashElem.appendChild(cElem);
         }
 
-    }
+        // button to hint a random filler puzzle (if possible)
+        let hintElem = document.createElement("div");
+        let fillerButton = document.createElement("button");
+        fillerButton.innerText = "Hint a random puzzle";
+        fillerButton.addEventListener("click", () => {
+            AP.hintRandomPuzzle();
+            buildDashboard();
+        });
+        if(AP.getUnreceivedPuzzles(false, true).length == 0) {
+            fillerButton.setAttribute("disabled", true);
+        }
+        hintElem.appendChild(fillerButton);
 
+        // button to hint a random pillar puzzle (if possible)
+        if(AP.slotData.bossUnlock == 2) {
+            let pillarButton = document.createElement("button");
+            pillarButton.innerText = "Hint a random pillar";
+            pillarButton.addEventListener("click", () => {
+                AP.hintRandomPuzzle(true);
+                buildDashboard();
+            });
+            if(AP.getUnreceivedPuzzles(true, true).length == 0) {
+                pillarButton.setAttribute("disabled", true);
+            }
+            hintElem.appendChild(pillarButton);
+        }
+        dashElem.appendChild(hintElem);
+    }
 }
 
 export default buildDashboard;

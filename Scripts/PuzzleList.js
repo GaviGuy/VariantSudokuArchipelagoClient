@@ -60,8 +60,8 @@ export function updatePuzzleList() {
     }
 
     // remove duplicates
-    filler = filler.filter((item, index) => filler.indexOf(item) === index);
-    pillar = pillar.filter((item, index) => pillar.indexOf(item) === index);
+    filler = filler.filter((a, b) => filler.indexOf(a) === b);
+    pillar = pillar.filter((a, b) => pillar.indexOf(a) === b);
 
     for(let i in filler) {
         let solved = AP.client.room.checkedLocations.includes(filler[i]);
