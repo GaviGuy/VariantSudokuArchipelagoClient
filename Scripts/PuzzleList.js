@@ -140,6 +140,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     else {
         let solvedElem = document.createElement("span");
         solvedElem.innerText = "Solved!"
+        solvedElem.classList.add("solved-indicator");
         solutionElem.appendChild(solvedElem);
     }
 
@@ -164,15 +165,19 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         }
     };
     for(let i = 0; i < puzzle.tags.length; i++) {
-        let elem = document.createElement("span");
+        let elem = document.createElement("img");
         let tag = lookupTag(puzzle.tags[i]);
         if(!tag) {
             elem.innerText = puzzle.tags[i];
             elem.setAttribute("title", "Unknown tag");
         }
         else {
-            elem.innerText = tag.name;
+            // elem.innerText = tag.name;
             elem.setAttribute("title", tag.name + "\n" + tag.desc);
+            if(tag.img)
+                elem.setAttribute("src", `Assets/Tags/${tag.img}`)
+            else
+                elem.setAttribute("src", "Assets/Tags/unknown.png");
         }
         tagsElem.appendChild(elem);
     }

@@ -131,6 +131,15 @@
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000VGO",
             "rating": 4,
             "solutionCode": "216839574"
+        },
+        {
+            "title": "violence against nature",
+            "author": "aqjhs",
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000VAN",
+            "rating": 5,
+            "duration": "303:59",
+            "solutionHint": "Digits on the column missing a 3, top to bottom.",
+            "solutionCode": "204795186"
         }
     ]
 }

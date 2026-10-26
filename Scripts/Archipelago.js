@@ -41,6 +41,9 @@ function initialize() {
     for(let i = 0; i < TABS.children.length; i++) {
         TABS.children[i].addEventListener("click", () => {setTab(i)});
     }
+    TABS.children[2].addEventListener("click", () => {
+        document.getElementById("chat-input").focus();
+    });
 
     //initialize login controls
     document.getElementById("controls-connect").addEventListener("click",

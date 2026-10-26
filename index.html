@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="Styles/TextChat.css">
     <script type="module" src="Scripts/Archipelago.js"></script>
     <script type="module" src="Scripts/PuzzleList.js"></script>
-    <script defer type="text/javascript" src="Scripts/Main.js"></script>
     <script defer type="text/javascript" src="Scripts/TopMenu.js"></script>
     <script defer type="text/javascript" src="Scripts/Tabs.js"></script>
 </head>
@@ -58,21 +57,43 @@
         </div>
         <div id="tab-contents">
             <div id="tab0" class="active">
-                dashboard
+                <div class="tab-title">
+                    Dashboard
+                </div>
             </div>
             <div id="tab1">
-                puzzle list
+                <div class="tab-title">
+                    Available Puzzles
+                </div>
                 <div id="tab1-list">
                 </div>
             </div>
             <div id="tab2">
-                AP text client
+                <div class="tab-title">
+                    AP Text Client
+                </div>
                 <div id="chat">
                     <div id="chat-log"></div>
                     <input id="chat-input"></input>
                     <button id="chat-send">Send Message</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="bottom-bar">
+        <div>
+            <a href="https://github.com/GaviGuy/VariantSudokuArchipelagoClient">
+                Variant Sudoku AP Client v0.1.0
+            </a>
+        </div>
+        <div>
+            <a href="wawa">
+                Setup Guide
+            </a>
+            &nbsp-&nbsp
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScG7NbD2R8RdrgbiN4k9ip_NHxpEdXJl3py8kBhOoK1-TUiAA/viewform">
+                Submit a puzzle
+            </a>
         </div>
     </div>
 </body>

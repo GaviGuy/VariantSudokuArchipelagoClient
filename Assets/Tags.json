@@ -10,18 +10,21 @@
             "id": "kropkiBlack",
             "name": "Black Kropki",
             "desc": "Digits seperated by a black kropki dot must differ in a 1:2 ratio",
-            "neg": "All black kropki dots are given"
+            "neg": "All black kropki dots are given",
+            "img": "kropkiBlack2.png"
         },
         {
             "id": "kropkiWhite",
             "name": "White Kropki",
             "desc": "Digits seperated by a white kropki dot must differ by 1",
-            "neg": "All white kropki dots are given"
+            "neg": "All white kropki dots are given",
+            "img": "kropkiWhite2.png"
         },
         {
             "id": "killerCage",
             "name": "Killer Cage",
-            "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage"
+            "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage",
+            "img": "killerCage.png"
         },
         {
             "id": "littleKiller",
@@ -32,7 +35,8 @@
             "id": "fiveTen",
             "name": "V and X Sums",
             "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
-            "neg": "All V's and X's are given"
+            "neg": "All V's and X's are given",
+            "img": "fiveTen.png"
         },
         {
             "id": "arrow",
@@ -52,7 +56,8 @@
         {
             "id": "renban",
             "name": "Renban",
-            "desc": "Digits on a pink renban line can't repeat and must form a continuous, consecutive set"
+            "desc": "Digits on a pink renban line can't repeat and must form a continuous, consecutive set",
+            "img": "renban2.png"
         },
         {
             "id": "germanWhisper",

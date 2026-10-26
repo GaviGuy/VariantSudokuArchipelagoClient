@@ -12,6 +12,10 @@
     border-color: #015 !important;
 }
 
+.solved-indicator {
+    font-weight: bolder;
+}
+
 .filler {
     background-color: #9BF;
     color: #052;
@@ -40,13 +44,18 @@
 }
 
 .tab1-tags {
+    display: flex;
     margin-top: 0.5em;
+    justify-content: end;
+    align-content: end;
 }
 
 .tab1-tags>* {
-    border: 1px solid #000;
-    border-radius: 1px;
+    border: 3px solid #000;
+    border-radius: 6px;
     margin-right: 0.25em;
-    padding-left: 0.25em;
-    padding-right: 0.25em;
+    /* padding-left: 0.25em; */
+    /* padding-right: 0.25em; */
+    /* width: 3em; */
+    height: 2em;
 }
