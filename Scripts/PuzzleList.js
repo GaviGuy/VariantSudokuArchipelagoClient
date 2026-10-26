@@ -1,4 +1,4 @@
-import {debugMode, client, localItems, slotData, sendLocations, checkBonus, getNumPuzzlesSolved} from "./Archipelago.js";
+import * as AP from "./Archipelago.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -11,30 +11,29 @@ async function getJson(path) {
         .catch(error => console.error('Failed to load puzzle list:', error));
 }
 
-const PUZZLES_DATABASE = await getJson("./Assets/Puzzles.json");
-const PUZZLES = PUZZLES_DATABASE.puzzles;
+export const PUZZLES_DATABASE = await getJson("./Assets/Puzzles.json");
+export const PUZZLES = PUZZLES_DATABASE.puzzles;
 
-const TAGS_DATABASE = await getJson("./Assets/Tags.json");
-const TAGS = TAGS_DATABASE.tags;
+export const TAGS_DATABASE = await getJson("./Assets/Tags.json");
+export const TAGS = TAGS_DATABASE.tags;
 
 export function getPuzzleById(id) {
     for(let i in PUZZLES) {
-        if(PUZZLES[i].id == id)
+        if(PUZZLES[i].id === id)
             return PUZZLES[i];
     }
 }
 
-function updatePuzzleList() {
-    //todo: prevent duplicates
+export function updatePuzzleList() {
     //todo: clearing the list is horrible for continuity, removing typed fields, etc
     let listElem = document.getElementById("tab1-list");
     listElem.innerHTML = "";
-    if(debugMode) {
+    if(AP.debugMode) {
         let cheatElem = document.createElement("input");
         cheatElem.addEventListener("keyup", (e) => {
             if(e.key === "Enter") {
                 console.log("cheated location id: " + cheatElem.value);
-                client.check(parseInt(cheatElem.value));
+                AP.client.check(parseInt(cheatElem.value));
                 cheatElem.value = "";
             }
         });
@@ -43,55 +42,60 @@ function updatePuzzleList() {
         let debugButtonElem = document.createElement("button");
         debugButtonElem.innerText = "debug";
         debugButtonElem.addEventListener("click", (e) => {
-            console.log(client.room.checkedLocations);
+            console.log(AP.localItems);
+            console.log(AP.client.room.checkedLocations);
         });
         listElem.appendChild(debugButtonElem);
     }
 
     // sort puzzles
     let filler = [], pillar = [];
-    for(let i = 0; i < localItems.length; i++) {
-        if(localItems[i].id >= 1000) {
-            if(slotData["bossUnlock"] == 2 && slotData["pillarIds"].includes(localItems[i].id))
-                pillar.push(localItems[i].id);
+    for(let i = 0; i < AP.localItems.length; i++) {
+        if(AP.localItems[i].id >= 1000) {
+            if(AP.slotData["bossUnlock"] == 2 && AP.slotData["pillarIds"].includes(AP.localItems[i].id))
+                pillar.push(AP.localItems[i].id);
             else
-                filler.push(localItems[i].id);
+                filler.push(AP.localItems[i].id);
         }
     }
 
+    // remove duplicates
+    filler = filler.filter((item, index) => filler.indexOf(item) === index);
+    pillar = pillar.filter((item, index) => pillar.indexOf(item) === index);
+
     for(let i in filler) {
-        let solved = client.room.checkedLocations.includes(filler[i]);
+        let solved = AP.client.room.checkedLocations.includes(filler[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(filler[i]), 0, solved));
     }
 
     for(let i in pillar) {
-        let solved = client.room.checkedLocations.includes(pillar[i]);
+        let solved = AP.client.room.checkedLocations.includes(pillar[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(pillar[i]), 1, solved));
     }
 
     if(canAccessBoss()) {
-        let solved = client.room.checkedLocations.includes(slotData.bossId);
-        listElem.appendChild(createPuzzleCard(getPuzzleById(slotData.bossId), 2, solved));
+        let solved = AP.client.room.checkedLocations.includes(AP.slotData.bossId);
+        listElem.appendChild(createPuzzleCard(getPuzzleById(AP.slotData.bossId), 2, solved));
     }
 }
 
-function canAccessBoss() {
-    switch(slotData.bossUnlock) {
+export function canAccessBoss() {
+    switch(AP.slotData.bossUnlock) {
         // Access the boss after getting slotData.bossUnlockCount keypieces
         case 0:
-            if(localItems.filter(x => x.id == 1).length >= slotData.bossUnlockCount)
+            if(AP.localItems.filter(x => x.id == 1).length >= AP.slotData.bossUnlockCount)
                 return true;
             return false;
 
         // Access the boss after solving slotData.bossUnlockCount puzzles
         case 1:
-            if(getNumPuzzlesSolved(client.room.checkedLocations, false) >= slotData.bossUnlockCount)
+            if(AP.getNumPuzzlesSolved(null, false) >= AP.slotData.bossUnlockCount)
                 return true;
             return false;
 
         // Access the boss after solving all puzzles in slotData.pillarIds
         case 2:
-            if(getNumPuzzlesSolved(client.room.checkedLocations, true) >= slotData.pillarIds.length)
+            if(AP.getNumPuzzlesSolved(null, true) >= AP.slotData.pillarIds.length)
                 return true;
             return false;
     }
@@ -99,7 +103,6 @@ function canAccessBoss() {
 
 function checkSolution(puzzle, solution) {
     if(puzzle.solutionCode == solution) {
-        updatePuzzleList();
         return true;
     }
     return false;
@@ -143,7 +146,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
                 let code = solutionInput.value;
                 if(checkSolution(puzzle, code)) {
                     console.warn("correct solution: " + code);
-                    sendLocations(puzzle)
+                    AP.sendLocations(puzzle)
                 }
                 else {
                     console.warn("incorrect solution: " + code);
@@ -160,12 +163,12 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     }
 
     // debug autosolve button
-    if(debugMode) {
+    if(AP.debugMode) {
         let autosolve = document.createElement("button");
         autosolve.textContent = "h";
         autosolve.addEventListener("click", () => {
-            sendLocations(puzzle);
-            checkBonus();
+            AP.sendLocations(puzzle);
+            AP.checkBonus(puzzle.id);
         });
         solutionElem.appendChild(autosolve);
     }
@@ -203,5 +206,3 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     retElem.appendChild(bottomElem);
     return retElem;
 }
-
-export default updatePuzzleList;

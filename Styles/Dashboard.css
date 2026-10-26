@@ -1,0 +1,43 @@
+#tab0-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 4rem;
+    margin-right: 4rem;
+}
+
+#item-list {
+    margin-top: 2rem;
+}
+
+#item-list>* {
+    margin-left: 0.25em;
+    font-size: 0.875em;
+}
+
+.go-mode, .pillar-mode, .filler-mode, .bk-mode {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    padding: 0.5rem;
+    width: 32rem;
+    text-align: center;
+    border: 2px solid #0000;
+    border-radius: 2rem; 
+    align-self: center;
+}
+
+.go-mode {
+    background-color: #5D6;
+}
+
+.pillar-mode {
+    background-color: #FC9;
+}
+
+.filler-mode {
+    background-color: #6AF;
+}
+
+.bk-mode {
+    background-color: #D42;
+}

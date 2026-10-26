@@ -6,7 +6,8 @@ export let slotData, address, username, connected;
 export let debugMode = false;
 export let numPuzzles = 0;
 
-import updatePuzzleList from "./PuzzleList.js";
+import buildDashboard from "./Dashboard.js";
+import * as PuzzleList from "./PuzzleList.js";
 
 
 
@@ -16,7 +17,7 @@ function initDebugHotkeys() {
             e.preventDefault();
             debugMode = !debugMode;
             //console.log(`${debugMode ? "enabling" : "disabling"} debug mode`);
-            updatePuzzleList();
+            PuzzleList.updatePuzzleList();
         }
     });
 }
@@ -30,6 +31,16 @@ function countLocations() {
         if(locId >= 1000 && locId % 10 == 0)
             numPuzzles++;
     }
+}
+
+export function countAvailablePuzzles() {
+    if(!connected) return 0;
+
+    let ret = 0;
+    for(let i in localItems) {
+        if(localItems[i].id >= 1000) ret++;
+    }
+    return ret;
 }
 
 function initialize() {
@@ -122,13 +133,35 @@ export function sendLocations(puzzle) {
     }
 }
 
+function canAccessPuzzleById(id) {
+    for(let i in localItems) {
+        if(localItems[i].id === id) return true;
+    }
+    return false;
+}
+
 export function getNumPuzzlesSolved(checkedIds, pillarsOnly) {
+    //todo: don't count locations that are inaccessible
+    if(!checkedIds) checkedIds = client.room.checkedLocations;
     let ret = 0;
     for(let i = 0; i < checkedIds.length; i++) {
         if(checkedIds[i] < 1000) continue;
         if(checkedIds[i] % 10 != 0) continue;
+        if(!canAccessPuzzleById(checkedIds[i])) continue;
         if(pillarsOnly && !slotData.pillarIds.includes(checkedIds[i])) continue;
         ret++;
+    }
+    return ret;
+}
+
+export function getUnsolvedPuzzles(pillarsOnly) {
+    let ret = [];
+    for(let i in localItems) {
+        if(localItems[i].id >= 1000 && !client.room.checkedLocations.includes(localItems[i].id)) {
+            if(!pillarsOnly || (slotData.bossUnlock == 2 && slotData.pillarIds.includes(localItems[i].id))) {
+                ret.push(PuzzleList.getPuzzleById(localItems[i].id));
+            }
+        }
     }
     return ret;
 }
@@ -164,10 +197,6 @@ export function checkBonus(newId) {
         // give 2 per solve until they run out
         case 1:
             nBonus = Math.ceil((numPuzzles - 1) / 2);
-            console.log(nBonus);
-            console.log(client.room.allLocations);
-            // TODO: does this value include the boss? it shouldn't
-            // should be trivial to subtract 1 if so
             for(let i = 0; i < solves * mult; i++) {
                 client.check(200 + i)
             }
@@ -182,6 +211,7 @@ export function checkBonus(newId) {
 
             for(let i = 0; i < solves * mult; i++) {
                 client.check(100 + i)
+                console.warn("checking bonus " + i);
             }
             break;
     }
@@ -197,7 +227,8 @@ client.messages.on("itemSent", (content) => {
 
 client.room.on("locationsChecked", () => {
     if(!connected) return;
-    updatePuzzleList();
+    buildDashboard();
+    PuzzleList.updatePuzzleList();
 });
 
 client.items.on("itemsReceived", (h) => {
@@ -210,7 +241,8 @@ client.items.on("itemsReceived", (h) => {
             name: item.name,
         });
     }
-    updatePuzzleList()
+    buildDashboard();
+    PuzzleList.updatePuzzleList();
 });
 
 function updateConnectButton() {
@@ -269,9 +301,9 @@ function login() {
                     name: item.name,
                 });
             }
-            console.warn(localItems);
             countLocations();
-            updatePuzzleList();
+            PuzzleList.updatePuzzleList();
+            buildDashboard();
 
         })
         .catch((e) => {
