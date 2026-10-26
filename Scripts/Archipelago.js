@@ -107,13 +107,13 @@ function sendChatMessage() {
 }
 
 export function sendLocations(puzzle) {
-    if(puzzle.id == (slotData["bossId"] - 1000) / 10) {
-        console.warn("goaled!");
+    if(puzzle.id == (slotData["bossId"])) {
+        console.log("Goaled!");
         client.goal();
     }
     else {
         for(let i = 0; i < puzzle.rating; i++) {
-            let locId = 1000 + puzzle.id * 10 + i
+            let locId = puzzle.id + i
             if(debugMode)
                 console.log("attempted to send location id: " + locId);
             client.check(locId);
@@ -133,7 +133,7 @@ export function getNumPuzzlesSolved(checkedIds, pillarsOnly) {
     return ret;
 }
 
-function checkBonus(newId) {
+export function checkBonus(newId) {
     let checkedIds = client.room.checkedLocations;
     checkedIds.push(newId);
 
@@ -163,7 +163,9 @@ function checkBonus(newId) {
         // # of bonuses equal to 50% of the filler puzzle count
         // give 2 per solve until they run out
         case 1:
-            nBonus = Math.ceil(numPuzzles / 2);
+            nBonus = Math.ceil((numPuzzles - 1) / 2);
+            console.log(nBonus);
+            console.log(client.room.allLocations);
             // TODO: does this value include the boss? it shouldn't
             // should be trivial to subtract 1 if so
             for(let i = 0; i < solves * mult; i++) {
@@ -286,12 +288,7 @@ function login() {
         });
 }
 
-function syncItems() {
-
-}
-
 window.onerror = () => {
     console.log('got an error');
     return false;
 }
-

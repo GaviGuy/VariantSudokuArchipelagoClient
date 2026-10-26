@@ -1,4 +1,4 @@
-import {debugMode, client, localItems, slotData, sendLocations, numPuzzles, getNumPuzzlesSolved} from "./Archipelago.js";
+import {debugMode, client, localItems, slotData, sendLocations, checkBonus, getNumPuzzlesSolved} from "./Archipelago.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -16,6 +16,13 @@ const PUZZLES = PUZZLES_DATABASE.puzzles;
 
 const TAGS_DATABASE = await getJson("./Assets/Tags.json");
 const TAGS = TAGS_DATABASE.tags;
+
+export function getPuzzleById(id) {
+    for(let i in PUZZLES) {
+        if(PUZZLES[i].id == id)
+            return PUZZLES[i];
+    }
+}
 
 function updatePuzzleList() {
     //todo: prevent duplicates
@@ -40,22 +47,31 @@ function updatePuzzleList() {
         });
         listElem.appendChild(debugButtonElem);
     }
+
+    // sort puzzles
+    let filler = [], pillar = [];
     for(let i = 0; i < localItems.length; i++) {
         if(localItems[i].id >= 1000) {
-            let type = 0;
-            if(slotData["bossUnlock"] == 2 && slotData["pillarIds"].includes(localItems[i].id)) {
-                type = 1;
-            }
-            let solved = client.room.checkedLocations.includes(localItems[i].id)
-
-            listElem.appendChild(createPuzzleCard(PUZZLES[(localItems[i].id - 1000) / 10], type, solved));
+            if(slotData["bossUnlock"] == 2 && slotData["pillarIds"].includes(localItems[i].id))
+                pillar.push(localItems[i].id);
+            else
+                filler.push(localItems[i].id);
         }
     }
 
-    // boss unlock must be shown manually, it's not a received item
+    for(let i in filler) {
+        let solved = client.room.checkedLocations.includes(filler[i]);
+        listElem.appendChild(createPuzzleCard(getPuzzleById(filler[i]), 0, solved));
+    }
+
+    for(let i in pillar) {
+        let solved = client.room.checkedLocations.includes(pillar[i]);
+        listElem.appendChild(createPuzzleCard(getPuzzleById(pillar[i]), 1, solved));
+    }
+
     if(canAccessBoss()) {
         let solved = client.room.checkedLocations.includes(slotData.bossId);
-        listElem.appendChild(createPuzzleCard(PUZZLES[(slotData.bossId - 1000) / 10], 2, solved));
+        listElem.appendChild(createPuzzleCard(getPuzzleById(slotData.bossId), 2, solved));
     }
 }
 
@@ -63,7 +79,6 @@ function canAccessBoss() {
     switch(slotData.bossUnlock) {
         // Access the boss after getting slotData.bossUnlockCount keypieces
         case 0:
-            console.warn("items: " + localItems);
             if(localItems.filter(x => x.id == 1).length >= slotData.bossUnlockCount)
                 return true;
             return false;
@@ -150,6 +165,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         autosolve.textContent = "h";
         autosolve.addEventListener("click", () => {
             sendLocations(puzzle);
+            checkBonus();
         });
         solutionElem.appendChild(autosolve);
     }
