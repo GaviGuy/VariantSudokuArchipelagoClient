@@ -4,11 +4,15 @@ export const client = new Client();
 export let localItems = [];
 export let slotData, address, username, connected;
 export let debugMode = false;
-export let numPuzzles = 0;
-let connectionCheckEvent;
+export let totalPuzzleCount = 0;
+export let allPuzzleIds = [];
+export let solvedIds = [];
+let censor = false;
 
 import buildDashboard from "./Dashboard.js";
-import * as PuzzleList from "./PuzzleList.js";
+import * as PL from "./PuzzleList.js";
+// import * as SL from "./SaveLoad.js";
+import { puzzleRerolls } from "./SaveLoad.js";
 
 
 
@@ -18,31 +22,55 @@ function initDebugHotkeys() {
             e.preventDefault();
             debugMode = !debugMode;
             //console.log(`${debugMode ? "enabling" : "disabling"} debug mode`);
-            PuzzleList.updatePuzzleList();
+            PL.updatePuzzleList();
         }
     });
 }
 
-function countLocations() {
+function readAllPuzzles() {
     if(!connected) return;
 
-    numPuzzles = 0;
-    for(let i = 0; i < client.room.allLocations.length; i++) {
+    allPuzzleIds = [];
+    for(let i in client.room.allLocations) {
         let locId = client.room.allLocations[i];
         if(locId >= 1000 && locId % 10 == 0)
-            numPuzzles++;
+            allPuzzleIds.push(locId);
     }
+    totalPuzzleCount = allPuzzleIds.length;
 }
 
-export function countAvailablePuzzles() {
-    if(!connected) return 0;
-
-    let ret = 0;
+export function getPlayableIds(pillarsOnly) {
+    let ret = [];
     for(let i in localItems) {
-        if(localItems[i].id >= 1000) ret++;
+        if(localItems[i].id >= 1000
+                && (!pillarsOnly || slotData.pillarIds.includes(localItems[i].id)))
+            ret.push(localItems[i].id);
+    }
+    if(PL.canAccessBoss())
+        ret.push(slotData.bossId);
+    return ret;
+}
+
+export function getUnsolvedPlayableIds(pillarsOnly) {
+    let ret = getPlayableIds(pillarsOnly);
+    for(let i in solvedIds) {
+        const ind = ret.indexOf(solvedIds[i])
+        if(ind > -1) {
+            ret.splice(ind, 1);
+        }
     }
     return ret;
 }
+
+export function getNumberPillarSolved() {
+    let ret = 0;
+    for(let i in slotData.pillarIds) {
+        if(solvedIds.includes(slotData.pillarIds[i]))
+            ret++;
+    }
+    return ret;
+}
+
 
 function initialize() {
     console.log("gmorning");
@@ -103,6 +131,7 @@ function initialize() {
                 console.log(client.authenticated);
             }
     });
+    setTopMenuState(menuStates.fixed);
     updateConnectButton();
 }
 initialize();
@@ -119,95 +148,37 @@ function sendChatMessage() {
 }
 
 export function sendLocations(puzzle) {
+    if(!(solvedIds.includes(puzzle.id)))
+        solvedIds.push(puzzle.id);
+    if(debugMode) console.log(solvedIds);
+
     if(puzzle.id == (slotData["bossId"])) {
-        console.log("Goaled!");
+        if(debugMode) console.log("Goaled!");
         client.goal();
     }
-    else {
-        for(let i = 0; i < puzzle.rating; i++) {
-            let locId = puzzle.id + i
-            if(debugMode)
-                console.log("attempted to send location id: " + locId);
-            client.check(locId);
-        }
-        checkBonus();
+    for(let i = 0; i < puzzle.rating; i++) {
+        let locId = puzzle.id + i
+        if(debugMode)
+            console.log("sent location: " + locId);
+        client.check(locId);
     }
+    checkBonus();
+    buildDashboard();
+    PL.updatePuzzleList();
+    SL.saveGame();
 }
 
-function canAccessPuzzleById(id) {
-    for(let i in localItems) {
-        if(localItems[i].id === id) return true;
-    }
-    return false;
-}
+export function checkBonus() {
 
-export function puzzleStatusById(id) {
-    // 0 for unreachable, 1 for reachable, 2 for solved, 3 for unreachable but solved
-    
-    let accessible = false;
-    if(id == slotData.bossId) {
-        if(PuzzleList.canAccessBoss()) {
-            accessible = true;
+    // get number of puzzles solved (or number of pillars, in pillar mode)
+    let solves = solvedIds.length;
+    if(slotData.bossUnlock == 2) {
+        solves = 0;
+        for(let i in slotData.pillarIds) {
+            if(solvedIds.includes(slotData.pillarIds[i]))
+                solves++;
         }
     }
-    else {
-        for(let i in localItems) {
-            if(localItems[i].id == id) {
-                accessible = true;
-            }
-        }
-    }
-
-    if(accessible) {
-        // todo: check if ALL locations are checked, not just the 0 index
-        // todo: this needs to work with save data in the long run, not just checked locations
-        if(client.room.checkedLocations.includes(id))
-            return 2;
-        return 1;
-    }
-    else {
-        if(client.room.checkedLocations.includes(id))
-            return 3;
-        return 0;
-    }
-}
-
-export function getNumPuzzlesSolved(checkedIds, pillarsOnly) {
-    //todo: don't count locations that are inaccessible
-    if(!checkedIds) checkedIds = client.room.checkedLocations;
-    let ret = 0;
-    for(let i = 0; i < checkedIds.length; i++) {
-        if(checkedIds[i] < 1000) continue;
-        if(checkedIds[i] % 10 != 0) continue;
-        if(!canAccessPuzzleById(checkedIds[i])) continue;
-        if(pillarsOnly && !slotData.pillarIds.includes(checkedIds[i])) continue;
-        ret++;
-    }
-    return ret;
-}
-
-export function getUnsolvedPuzzles(pillarsOnly) {
-    let ret = [];
-    for(let i in localItems) {
-        if(localItems[i].id >= 1000 && !client.room.checkedLocations.includes(localItems[i].id)) {
-            if(!pillarsOnly || (slotData.bossUnlock == 2 && slotData.pillarIds.includes(localItems[i].id))) {
-                ret.push(PuzzleList.getPuzzleById(localItems[i].id));
-            }
-        }
-    }
-    return ret;
-}
-
-export function checkBonus(newId) {
-    let checkedIds = client.room.checkedLocations;
-    checkedIds.push(newId);
-
-    //no duplicates
-    checkedIds = checkedIds.filter((item, index) => checkedIds.indexOf(item) === index);
-
-    let solves = getNumPuzzlesSolved(checkedIds, false);
-    if(slotData.bossUnlock == 2)
-        solves = getNumPuzzlesSolved(checkedIds, true);
 
     let nBonus = 0;
     let mult = 2;
@@ -218,7 +189,7 @@ export function checkBonus(newId) {
         // give enough per solve that they run out before solving all filler
         case 0:
             nBonus = slotData.bossUnlockCount;
-            while(numPuzzles * mult < nBonus)
+            while(totalPuzzleCount * mult < nBonus)
                 mult++;
             for(let i = 0; i < solves * mult; i++) {
                 client.check(200 + i)
@@ -228,7 +199,7 @@ export function checkBonus(newId) {
         // # of bonuses equal to 50% of the filler puzzle count
         // give 2 per solve until they run out
         case 1:
-            nBonus = Math.ceil((numPuzzles - 1) / 2);
+            nBonus = Math.ceil((totalPuzzleCount - 1) / 2);
             for(let i = 0; i < solves * mult; i++) {
                 client.check(200 + i)
             }
@@ -243,13 +214,12 @@ export function checkBonus(newId) {
 
             for(let i = 0; i < solves * mult; i++) {
                 client.check(100 + i)
-                console.warn("checking bonus " + i);
             }
             break;
     }
 }
 
-export function getUnreceivedPuzzles(pillar, blockHinted) {
+export function getUnreceivedPuzzles(pillarsOnly, blockHinted) {
     let hints = [];
     if(blockHinted) {
         for(let i in client.items.hints) {
@@ -259,26 +229,24 @@ export function getUnreceivedPuzzles(pillar, blockHinted) {
         }
     }
 
+    // make an array of unrecieved puzzles
+    // disclude puzzles that've been hinted if blockHinted
     let ret = []
-    if(pillar) {
+    if(pillarsOnly) {
+        const playables = getPlayableIds(pillarsOnly);
         for(let i in slotData.pillarIds) {
-            if([0, 3].includes(puzzleStatusById(slotData.pillarIds[i]))
-                    && !(blockHinted && hints.includes(slotData.pillarIds[i]))) {
-                ret.push(slotData.pillarIds[i]);
-            }
+            if(playables.includes(slotData.pillarIds[i])) continue;
+            if(blockHinted && hints.includes(slotData.pillarIds[i])) continue;
+            ret.push(slotData.pillarIds[i]);
         }
     }
     else {
-        let missing = client.room.missingLocations;
-        for(let i in missing) {
-            if(missing[i] < 1000) continue;
-            let itemId = Math.floor(missing[i] / 10) * 10;
-            if(itemId == slotData.bossId) continue;
-
-            if([0, 3].includes(puzzleStatusById(itemId))
-                    && !(blockHinted && hints.includes(itemId))) {
-                ret.push(itemId);
-            }
+        const playables = getPlayableIds();
+        for(let i in allPuzzleIds) {
+            if(playables.includes(allPuzzleIds[i])) continue;
+            if(allPuzzleIds[i] == slotData.bossId) continue;
+            if(blockHinted && hints.includes(allPuzzleIds[i])) continue;
+            ret.push(allPuzzleIds[i]);
         }
     }
     ret = ret.filter((a, b) => ret.indexOf(a) === b);
@@ -286,7 +254,7 @@ export function getUnreceivedPuzzles(pillar, blockHinted) {
     return ret;
 }
 
-export function hintRandomPuzzle(pillar) {
+export function hintRandomPuzzle(pillarsOnly) {
     if(client.room.hintPoints < client.room.hintCost) {
         let printStr = `You can't afford the hint. `
                 + `You have ${client.room.hintPoints} point${client.room.hintPoints == 1 ? "" : "s"} `
@@ -295,7 +263,7 @@ export function hintRandomPuzzle(pillar) {
         return;
     }
 
-    let validItems = getUnreceivedPuzzles(pillar, true);
+    let validItems = getUnreceivedPuzzles(pillarsOnly, true);
     if(validItems.length == 0) {
         printChatMessage("There are no more puzzles to hint");
         return;
@@ -309,15 +277,11 @@ client.messages.on("message", (content) => {
     printChatMessage(content);
 });
 
-client.messages.on("itemSent", (content) => {
-    //printChatMessage("sent: " + content);
-});
+// client.messages.on("itemSent", (content) => {
+// });
 
-client.room.on("locationsChecked", () => {
-    if(!connected) return;
-    buildDashboard();
-    PuzzleList.updatePuzzleList();
-});
+// client.room.on("locationsChecked", () => {
+// });
 
 client.items.on("itemsReceived", (h) => {
     if(!connected) return
@@ -330,7 +294,8 @@ client.items.on("itemsReceived", (h) => {
         });
     }
     buildDashboard();
-    PuzzleList.updatePuzzleList();
+    PL.updatePuzzleList();
+    // SL.saveGame();
 });
 
 client.items.on("hintsInitialized", (h) => {
@@ -386,7 +351,9 @@ function login(isReconnect) {
             console.log(slotData);
             document.getElementById("controls-disconnect").removeAttribute("disabled");
             setTopMenuState(menuStates.collapsed);
-            updateTopBar(topBarStates.connected, `Connected to ${addressIn} as ${usernameIn}`);
+            
+            let subMsg = `${addressIn}${censor ? "" : `as ${usernameIn}`}`;
+            updateTopBar(topBarStates.connected, `Connected to ${subMsg}`);
 
             localItems = []
             for(let i = 0; i < client.items.received.length; i++) {
@@ -396,8 +363,10 @@ function login(isReconnect) {
                     name: item.name,
                 });
             }
-            countLocations();
-            PuzzleList.updatePuzzleList();
+
+            // update tabs
+            readAllPuzzles();
+            PL.updatePuzzleList();
             buildDashboard();
 
             client.socket.on("disconnected", attemptReconnect, 5000);
@@ -426,4 +395,25 @@ window.onerror = () => {
 
 function attemptReconnect(delay) {
     setTimeout(login, delay, true);
+}
+
+function toggleCensor(connected, address, username) {
+    censor = !censor;
+    document.getElementById("controls-censor").innerText = censor ? "x" : "o";
+
+    let elem = document.getElementById("top-text");
+    if(connected) {
+        if(censor) 
+            elem.innerText = `Connected as ${username}`;
+        else 
+            elem.innerText = `Connected to ${address} as ${username}`;
+    }
+    if(censor) {
+        document.getElementById("input-password").setAttribute("type", "password");
+        document.getElementById("input-address").setAttribute("type", "password");
+    }
+    else {
+        document.getElementById("input-password").setAttribute("type", "text");
+        document.getElementById("input-address").setAttribute("type", "text");
+    }
 }

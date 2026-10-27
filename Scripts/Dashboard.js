@@ -9,29 +9,29 @@ export function buildDashboard() {
         // Report current status
         let statusElem = document.createElement("div");
 
-        let bossStatus = AP.puzzleStatusById(AP.slotData.bossId);
-        if(bossStatus == 3) {
-            statusElem.innerText = "Boss inaccessible but beaten ??";
-            statusElem.classList.add("bk-mode");
+        if(AP.solvedIds.includes(AP.slotData.bossId)) {
+            if(canAccessBoss()) {
+                statusElem.innerText = "Game cleared!";
+                statusElem.classList.add("go-mode");
+            }
+            else {
+                statusElem.innerText = "Boss inaccessible but beaten ??";
+                statusElem.classList.add("bk-mode");
+            }
         }
 
-        else if(bossStatus == 2) {
-            statusElem.innerText = "Game cleared!";
-            statusElem.classList.add("go-mode");
-        }
-
-        else if(bossStatus == 1) {
+        else if(canAccessBoss()) {
             statusElem.innerText = "Boss available!";
             statusElem.classList.add("go-mode");
         }
 
-        else if(AP.getUnsolvedPuzzles(true).length > 0) {
-            statusElem.innerText = `Pillar${AP.getUnsolvedPuzzles(true).length > 1 ? "s" : ""} available`;
+        else if(AP.slotData.bossUnlock == 2 && AP.getUnsolvedPlayableIds(true).length > 0) {
+            statusElem.innerText = `Pillar${AP.getUnsolvedPlayableIds(true).length > 1 ? "s" : ""} available`;
             statusElem.classList.add("pillar-mode");
         }
 
-        else if(AP.getUnsolvedPuzzles().length > 0) {
-            statusElem.innerText = `Puzzle${AP.getUnsolvedPuzzles().length > 1 ? "s" : ""} available`;
+        else if(AP.getUnsolvedPlayableIds().length > 0) {
+            statusElem.innerText = `Puzzle${AP.getUnsolvedPlayableIds().length > 1 ? "s" : ""} available`;
             statusElem.classList.add("filler-mode");
         }
 
@@ -44,7 +44,7 @@ export function buildDashboard() {
 
 
         // Report available puzzles
-        let aPuzzles = AP.countAvailablePuzzles() - AP.getNumPuzzlesSolved();
+        let aPuzzles = AP.getUnsolvedPlayableIds().length;
         let aElem = document.createElement("div");
         aElem.innerText = `Unsolved puzzles: ${aPuzzles}`;
 
@@ -61,13 +61,13 @@ export function buildDashboard() {
                 break;
 
             case 1:
-                prog = AP.getNumPuzzlesSolved();
+                prog = AP.solvedIds.length;
                 goal = AP.slotData.bossUnlockCount;
                 item = "Puzzles Solved"
                 break;
 
             case 2:
-                prog = AP.getNumPuzzlesSolved(null, true);
+                prog = AP.getNumberPillarSolved();
                 goal = AP.slotData.pillarIds.length
                 item = "Pillars Solved"
                 break;

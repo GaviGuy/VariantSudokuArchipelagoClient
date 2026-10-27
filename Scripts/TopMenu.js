@@ -1,5 +1,3 @@
-let censor = false;
-
 const menuStates = {
     fixed: 0,
     collapsed: 1,
@@ -45,25 +43,4 @@ const topBarStates = {
 function updateTopBar(index, message) {
     document.getElementById("connection-info").setAttribute("state", index);
     document.getElementById("top-text").innerText = message;
-}
-
-function toggleCensor(connected, address, username) {
-    censor = !censor;
-    document.getElementById("controls-censor").innerText = censor ? "o" : "x";
-
-    let elem = document.getElementById("top-text");
-    if(connected) {
-        if(censor) 
-            elem.innerText = `Connected as ${username}`;
-        else 
-            elem.innerText = `Connected to ${address} as ${username}`;
-    }
-    if(censor) {
-        document.getElementById("input-password").setAttribute("type", "password");
-        document.getElementById("input-address").setAttribute("type", "password");
-    }
-    else {
-        document.getElementById("input-password").setAttribute("type", "text");
-        document.getElementById("input-address").setAttribute("type", "text");
-    }
 }
