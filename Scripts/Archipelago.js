@@ -5,6 +5,7 @@ export let localItems = [];
 export let slotData, address, username, connected;
 export let debugMode = false;
 export let numPuzzles = 0;
+let connectionCheckEvent;
 
 import buildDashboard from "./Dashboard.js";
 import * as PuzzleList from "./PuzzleList.js";
@@ -256,7 +257,6 @@ export function getUnreceivedPuzzles(pillar, blockHinted) {
                 hints.push(client.items.hints[i].item.id);
             }
         }
-        console.warn(hints);
     }
 
     let ret = []
@@ -347,7 +347,8 @@ function updateConnectButton() {
 
 function disconnect() {
     updateForDisconnect();
-    client.login().catch(()=>{});
+    client.socket.off("disconnected", attemptReconnect, 5000);
+    client.socket.disconnect();
     updateTopBar(topBarStates.none, "Disconnected");
 }
 
@@ -360,7 +361,7 @@ function updateForDisconnect() {
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
 }
 
-function login() {
+function login(isReconnect) {
     let addressIn = document.getElementById("input-address").value;
     let usernameIn = document.getElementById("input-username").value;
     let passwordIn = document.getElementById("input-password").value;
@@ -368,8 +369,10 @@ function login() {
     if(!addressIn || !usernameIn) return;
 
     disconnect();
-    updateTopBar(topBarStates.connecting, "Connecting...")
-    console.log("logging in...");
+    if(isReconnect)
+        updateTopBar(topBarStates.connecting, "Reconnecting...")
+    else
+        updateTopBar(topBarStates.connecting, "Connecting...")
 
     const options = {};
     if(passwordIn) options.password = passwordIn;
@@ -397,11 +400,15 @@ function login() {
             PuzzleList.updatePuzzleList();
             buildDashboard();
 
+            client.socket.on("disconnected", attemptReconnect, 5000);
+
         })
         .catch((e) => {
             console.error(e);
             updateForDisconnect();
-            if(e.message.includes("InvalidSlot"))
+            if(isReconnect)
+                updateTopBar(topBarStates.error, `Connection lost`);
+            else if(e.message.includes("InvalidSlot"))
                 updateTopBar(topBarStates.error, `Failed to connect: Invalid slot name`);
             else if(e.message.includes("InvalidPassword"))
                 updateTopBar(topBarStates.error, `Failed to connect: Incorrect password`);
@@ -415,4 +422,8 @@ function login() {
 window.onerror = () => {
     console.log('got an error');
     return false;
+}
+
+function attemptReconnect(delay) {
+    setTimeout(login, delay, true);
 }
