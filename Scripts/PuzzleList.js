@@ -43,8 +43,7 @@ export function updatePuzzleList() {
         let debugButtonElem = document.createElement("button");
         debugButtonElem.innerText = "debug";
         debugButtonElem.addEventListener("click", (e) => {
-            console.log(AP.localItems);
-            console.log(AP.client.room.checkedLocations);
+            console.log(AP.solvedIds);
         });
         listElem.appendChild(debugButtonElem);
     }
@@ -120,6 +119,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let titleElem = document.createElement("a");
     titleElem.classList.add("puzzle-title");
     titleElem.setAttribute("href", puzzle.link);
+    titleElem.setAttribute("target", "__blank");
     titleElem.innerText = puzzle.title;
     topElem.appendChild(titleElem);
 

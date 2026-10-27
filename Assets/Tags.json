@@ -11,14 +11,14 @@
             "name": "Black Kropki",
             "desc": "Digits seperated by a black kropki dot must differ in a 1:2 ratio",
             "neg": "All black kropki dots are given",
-            "img": "kropkiBlack2.png"
+            "img": "kropkiBlack3.png"
         },
         {
             "id": "kropkiWhite",
             "name": "White Kropki",
             "desc": "Digits seperated by a white kropki dot must differ by 1",
             "neg": "All white kropki dots are given",
-            "img": "kropkiWhite2.png"
+            "img": "kropkiWhite3.png"
         },
         {
             "id": "killerCage",

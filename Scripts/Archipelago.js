@@ -11,7 +11,7 @@ let censor = false;
 
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
-// import * as SL from "./SaveLoad.js";
+import * as SL from "./SaveLoad.js";
 import { puzzleRerolls } from "./SaveLoad.js";
 
 
@@ -295,7 +295,7 @@ client.items.on("itemsReceived", (h) => {
     }
     buildDashboard();
     PL.updatePuzzleList();
-    // SL.saveGame();
+    SL.saveGame();
 });
 
 client.items.on("hintsInitialized", (h) => {
@@ -355,17 +355,12 @@ function login(isReconnect) {
             let subMsg = `${addressIn}${censor ? "" : `as ${usernameIn}`}`;
             updateTopBar(topBarStates.connected, `Connected to ${subMsg}`);
 
-            localItems = []
-            for(let i = 0; i < client.items.received.length; i++) {
-                let item = client.items.received[i];
-                localItems.push({
-                    id: item.id,
-                    name: item.name,
-                });
-            }
+            // load data
+            readLocalItems();
+            readAllPuzzles();
+            SL.loadGame();
 
             // update tabs
-            readAllPuzzles();
             PL.updatePuzzleList();
             buildDashboard();
 
@@ -382,10 +377,21 @@ function login(isReconnect) {
             else if(e.message.includes("InvalidPassword"))
                 updateTopBar(topBarStates.error, `Failed to connect: Incorrect password`);
             else if(e.message.includes("InvalidGame"))
-                updateTopBar(topBarStates.error, `Failed to connect: Incorrect game for slot`);
+                updateTopBar(topBarStates.error, `Failed to connect: Incorrect game`);
             else
                 updateTopBar(topBarStates.error, `Failed to connect to server`);
         });
+}
+
+function readLocalItems() {
+    localItems = []
+    for(let i in client.items.received) {
+        const item = client.items.received[i];
+        localItems.push({
+            id: item.id,
+            name: item.name,
+        });
+    }
 }
 
 window.onerror = () => {
@@ -416,4 +422,9 @@ function toggleCensor(connected, address, username) {
         document.getElementById("input-password").setAttribute("type", "text");
         document.getElementById("input-address").setAttribute("type", "text");
     }
+}
+
+// helpers for saving and loading
+export function setSolvedIds(newIds) {
+    solvedIds = newIds;
 }
