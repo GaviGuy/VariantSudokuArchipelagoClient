@@ -51,6 +51,11 @@ export function updatePuzzleList() {
             console.log(wawa);
         });
         listElem.appendChild(debugButtonElem);
+
+        let buildButton = document.createElement("a");
+        buildButton.setAttribute("href", "buildJson.html");
+        buildButton.innerText = "Puzzle build page";
+        listElem.appendChild(buildButton);
     }
 
     // sort puzzles

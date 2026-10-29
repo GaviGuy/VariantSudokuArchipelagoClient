@@ -39,13 +39,32 @@ function doThingy() {
             }
         }
 
-        // check for any invalid tags
+        // convert tags, report unrecognized ones
         let tagNames = [];
         for(let i in TAGS) {
             tagNames.push(TAGS[i].id);
         }
         for(let i in PUZZLES_DATABASE.puzzles) {
             const p = PUZZLES_DATABASE.puzzles[i];
+            if(!p.tags) p.tags = [];
+
+            // convert sheetTags to tags, report unrecognized sheetTags
+            let sheetTags = p.sheetTags[0].split(",");
+            for(let j in sheetTags) {
+                const convTag = sheetTags[j].trim();
+                let found = false;
+                for(let k in TAGS) {
+                    if(convTag == TAGS[k].sheet) {
+                        p.tags.push(TAGS[k].id);
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) console.error(`${p.id}: unknown sheet tag: ${convTag}`);
+            }
+            delete p.sheetTags;
+
+            // report unrecognized tags
             for(let j in p.tags) {
                 if(!(tagNames.includes(p.tags[j]))) {
                     console.error(`${p.id}: unknown tag: ${p.tags[j]}`);

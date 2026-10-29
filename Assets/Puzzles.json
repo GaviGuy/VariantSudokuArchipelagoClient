@@ -8,14 +8,14 @@
             "id": 1000,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MDP",
             "rating": 1,
+            "solutionHint": "Row 8 (left to right)",
+            "solutionHash": 247588940667880,
             "tags": [
-                "renban",
                 "kropkiBlack",
                 "kropkiWhite",
-                "killerCage"
-            ],
-            "solutionHint": "Row 8 (left to right)",
-            "solutionHash": 247588940667880
+                "killerCage",
+                "renban"
+            ]
         },
         {
             "title": "Hungry Sevens",
@@ -23,14 +23,14 @@
             "id": 1010,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MEA",
             "rating": 1,
+            "solutionHint": "Row 7 (left to right)",
+            "solutionHash": 8179123328400248,
             "tags": [
-                "evenOdd",
                 "kropkiBlack",
                 "kropkiWhite",
+                "evenOdd",
                 "misc"
-            ],
-            "solutionHint": "Row 7 (left to right)",
-            "solutionHash": 8179123328400248
+            ]
         },
         {
             "title": "Whirlwind",
@@ -38,14 +38,14 @@
             "id": 1020,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MJQ",
             "rating": 2,
+            "solutionHint": "Column 9 (top to bottom)",
+            "solutionHash": 355665744774953,
             "tags": [
                 "kropkiBlack",
                 "kropkiWhite",
                 "fiveTen",
                 "otherLine"
-            ],
-            "solutionHint": "Column 9 (top to bottom)",
-            "solutionHash": 355665744774953
+            ]
         },
         {
             "title": "A Few Odd Sums",
@@ -53,28 +53,28 @@
             "id": 1030,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N5J",
             "rating": 1,
-            "tags": [
-                "regionSum",
-                "kropkiWhite",
-                "killerCage"
-            ],
             "solutionHint": "Box 1 (normal reading order)",
-            "solutionHash": 8302356716246479
+            "solutionHash": 8302356716246479,
+            "tags": [
+                "kropkiWhite",
+                "killerCage",
+                "regionSum"
+            ]
         },
         {
             "title": "Cinna-mod Rolls",
             "author": "kyuquu + Gavi Guy",
             "id": 1040,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N8L",
-            "rating": 2,
-            "tags": [
-                "modular",
-                "kropkiWhite",
-                "kropkiBlack",
-                "fiveTen"
-            ],
+            "rating": 3,
             "solutionHint": "Column 1 (top to bottom)",
-            "solutionHash": 2700723054364719
+            "solutionHash": 2700723054364719,
+            "tags": [
+                "kropkiBlack",
+                "kropkiWhite",
+                "fiveTen",
+                "modular"
+            ]
         },
         {
             "title": "Modular Fog",
@@ -82,16 +82,16 @@
             "id": 1050,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NCH",
             "rating": 1,
+            "solutionHint": "Row 9 (left to right)",
+            "solutionHash": 7146903264480553,
             "tags": [
-                "modular",
-                "fog",
                 "kropkiBlack",
                 "kropkiWhite",
                 "fiveTen",
-                "killerCage"
-            ],
-            "solutionHint": "Row 9 (left to right)",
-            "solutionHash": 7146903264480553
+                "killerCage",
+                "modular",
+                "fog"
+            ]
         },
         {
             "title": "Superimposed Sums",
@@ -99,13 +99,13 @@
             "id": 1060,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NPL",
             "rating": 2,
-            "tags": [
-                "regionSum",
-                "renban",
-                "kropkiWhite"
-            ],
             "solutionHint": "Column 1 (top to bottom)",
-            "solutionHash": 1578920467532710
+            "solutionHash": 1578920467532710,
+            "tags": [
+                "kropkiWhite",
+                "renban",
+                "regionSum"
+            ]
         },
         {
             "title": "Angled Sets",
@@ -113,13 +113,13 @@
             "id": 1070,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NY3",
             "rating": 3,
-            "tags": [
-                "renban",
-                "killerCage",
-                "kropkiBlack"
-            ],
             "solutionHint": "Row 5 (left to right)",
-            "solutionHash": 2583363066351279
+            "solutionHash": 2583363066351279,
+            "tags": [
+                "kropkiBlack",
+                "killerCage",
+                "renban"
+            ]
         },
         {
             "title": "Synergistic Sums",
@@ -127,12 +127,12 @@
             "id": 1080,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000PQJ",
             "rating": 1,
+            "solutionHint": "Box 1 (normal reading order)",
+            "solutionHash": 4133044626694641,
             "tags": [
                 "killerCage",
                 "arrow"
-            ],
-            "solutionHint": "Box 1 (normal reading order)",
-            "solutionHash": 4133044626694641
+            ]
         },
         {
             "title": "Centerpiece",
@@ -140,14 +140,99 @@
             "id": 1090,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000Q5W",
             "rating": 3,
-            "tags": [
-                "entropic",
-                "germanWhisper",
-                "fiveTen",
-                "kropkiWhite"
-            ],
             "solutionHint": "Column 9 (top to bottom)",
-            "solutionHash": 6431555319294204
+            "solutionHash": 6431555319294204,
+            "tags": [
+                "kropkiWhite",
+                "fiveTen",
+                "germanWhisper",
+                "entropic"
+            ]
+        },
+        {
+            "title": "Distinctive Shapes",
+            "author": "Moonsinh",
+            "id": 1100,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000M1G",
+            "rating": 1,
+            "solutionHint": "First row of the sudoku.",
+            "solutionHash": 7261155710964137,
+            "tags": [
+                "kropkiWhite",
+                "killerCage",
+                "arrow"
+            ]
+        },
+        {
+            "title": "Dutch Quads On Tall Boxes",
+            "author": "Moonsinh",
+            "id": 1110,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MED",
+            "rating": 1,
+            "solutionHint": "Row 5 of the Sudoku, read from left to right.",
+            "solutionHash": 4516334448752060,
+            "tags": [
+                "quads",
+                "renban",
+                "otherWhisper"
+            ]
+        },
+        {
+            "title": "Low German Whisper?",
+            "author": "Moonsinh",
+            "id": 1120,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000T8S",
+            "rating": 3,
+            "solutionHint": "Row 8",
+            "solutionHash": 4518630954209459,
+            "tags": [
+                "fiveTen",
+                "otherWhisper"
+            ]
+        },
+        {
+            "title": "Spring Flower",
+            "author": "Moonsinh",
+            "id": 1130,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000SLH",
+            "rating": 3,
+            "solutionHint": "Column 4",
+            "solutionHash": 5861417076277489,
+            "tags": [
+                "renban",
+                "otherWhisper",
+                "irregular",
+                "minMax"
+            ]
+        },
+        {
+            "title": "Distinct Neighbourhoods",
+            "author": "Moonsinh",
+            "id": 1140,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000PWN",
+            "rating": 3,
+            "solutionHint": "Row 7",
+            "solutionHash": 3266056975410563,
+            "tags": [
+                "kropkiBlack",
+                "kropkiWhite",
+                "misc"
+            ]
+        },
+        {
+            "title": "Of Angles and Diamons",
+            "author": "Moonsinh",
+            "id": 1150,
+            "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000Q83",
+            "rating": 3,
+            "solutionHint": "Row 7",
+            "solutionHash": 199715630912787,
+            "tags": [
+                "renban",
+                "entropic",
+                "modular",
+                "minMax"
+            ]
         }
     ]
 }

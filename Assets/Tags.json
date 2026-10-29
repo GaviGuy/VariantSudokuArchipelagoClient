@@ -4,16 +4,19 @@
         {
             "id": "vanilla",
             "name": "Vanilla",
+            "sheet": "Vanilla (no variant rules)",
             "desc": "Ordinary sudoku. No other rules apply"
         },
         {
             "id": "notSudoku",
             "name": "Something Else",
+            "sheet": "Not Sudoku",
             "desc": "This puzzle isn't sudoku, and doesn't abide by normal sudoku rules"
         },
         {
             "id": "kropkiBlack",
             "name": "Black Kropki",
+            "sheet": "Black Kropki",
             "desc": "Digits seperated by a black kropki dot must differ in a 1:2 ratio",
             "neg": "All black kropki dots are given",
             "img": "kropkiBlack3.png"
@@ -21,13 +24,15 @@
         {
             "id": "kropkiWhite",
             "name": "White Kropki",
+            "sheet": "White Kropki",
             "desc": "Digits seperated by a white kropki dot must differ by 1",
             "neg": "All white kropki dots are given",
             "img": "kropkiWhite3.png"
         },
         {
             "id": "fiveTen",
-            "name": "V and X Sums",
+            "name": "V or X Sums",
+            "sheet": "V or X Sums",
             "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
             "neg": "All V's and X's are given",
             "img": "fiveTen.png"
@@ -35,175 +40,209 @@
         {
             "id": "quads",
             "name": "Quadruples",
+            "sheet": "Quadruples",
             "desc": "Numbers inside a dot centered on 4 cells indicate which digits must appear at least once in those 4 cells",
             "img": "fiveTen.png"
         },
         {
             "id": "circles",
             "name": "Counting Circles",
+            "sheet": "Counting Circles",
             "desc": "A digit inside a circle indicates how many times that digit appears in a circle",
             "img": "fiveTen.png"
         },
         {
             "id": "killerCage",
-            "name": "Killer Cage",
+            "name": "Killer Cages",
+            "sheet": "Killer Cages",
             "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage",
             "img": "killerCage.png"
         },
         {
             "id": "littleKiller",
-            "name": "Little Killer",
+            "name": "Little Killers",
+            "sheet": "Little Killers",
             "desc": "Arrowed numbers outside the grid denote the sum of all cells along their pointed lines"
         },
         {
             "id": "fastThermo",
             "name": "Thermometer",
+            "sheet": "Thermometer",
             "desc": "Digits on a thermometer must strictly increase from bulb to tip"
         },
         {
             "id": "slowThermo",
             "name": "Slow Thermometer",
+            "sheet": "Slow Thermometer",
             "desc": "Digits on a thermometer must not decrease from bulb to tip"
         },
         {
             "id": "arrow",
             "name": "Arrow",
+            "sheet": "Arrow",
             "desc": "The digits on an arrow sum to the value in the attached circle"
         },
         {
             "id": "doubleArrow",
             "name": "Double Arrow",
+            "sheet": "Double Arrow",
             "desc": "The digits on two connected circles and the digits on the line between them sum to the same value"
         },
         {
             "id": "renban",
-            "name": "Renban",
+            "name": "Renban Line",
+            "sheet": "Renban Line",
             "desc": "Digits on a pink renban line can't repeat and must form a continuous, consecutive set",
             "img": "renban2.png"
         },
         {
             "id": "germanWhisper",
-            "name": "German Whisper",
+            "name": "German Whisper Line",
+            "sheet": "German Whisper Line",
             "desc": "Adjacent digits on a green whisper line must differ by 5 or more"
         },
         {
             "id": "otherWhisper",
-            "name": "Whisper",
+            "name": "Whisper Line",
+            "sheet": "Other Whisper Line",
             "desc": "Adjacent digits on a whisper line must differ by a given amount"
         },
         {
             "id": "regionSum",
-            "name": "Region Sum",
+            "name": "Region Sum Line",
+            "sheet": "Region Sum Line",
             "desc": "Region borders divide a region sum line into segments. Each segment's digits must sum to the same value"
         },
         {
             "id": "parity",
             "name": "Parity Line",
+            "sheet": "Parity Line",
             "desc": "Adjacent digits on a parity line must be odd and even"
         },
         {
             "id": "entropic",
             "name": "Entropic Line",
+            "sheet": "Entropic Line",
             "desc": "Any set of 3 adjacent cells on an entropic line must contain a low (1-3), medium (4-6), and high (7-9) digit"
         },
         {
             "id": "modular",
             "name": "Modular Line",
+            "sheet": "Modular Line",
             "desc": "Any set of 3 adjacent cells on a modular line must have a unique remainder when divided by 3"
         },
         {
             "id": "palindrome",
             "name": "Palindrome Line",
+            "sheet": "Palindrome Line",
             "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards"
         },
         {
             "id": "diagonal",
             "name": "Diagonals",
+            "sheet": "Diagonals",
             "desc": "A diagonal line going from corner to corner must have one of every digit"
         },
         {
             "id": "otherLine",
             "name": "Other Line",
+            "sheet": "Some other kind of line",
             "desc": "There's a line that places some kind of restriction on some digits"
         },
         {
             "id": "irregular",
-            "name": "Irregular",
+            "name": "Irregular Sudoku",
+            "sheet": "Irregular Sudoku",
             "desc": "Regions boundaries are irregularly shaped"
         },
         {
             "id": "chaosConstruct",
             "name": "Chaos Construction",
+            "sheet": "Chaos Construction",
             "desc": "Region boundaries are irregularly shaped and must be deduced by the solver"
         },
         {
             "id": "skyscraper",
-            "name": "Skyscraper",
+            "name": "Skyscrapers",
+            "sheet": "Skyscrapers",
             "desc": "Numbers outside the grid indicate how many digits are visible when looking into the grid. Digits block visibility of lower digits behind them"
         },
         {
             "id": "sandwich",
             "name": "Sandwich Sums",
+            "sheet": "Sandwich Sums",
             "desc": "Numbers outside the grid indicate the sum of the digits located between 2 specific digits"
         },
         {
             "id": "xSum",
             "name": "X Sums",
+            "sheet": "X Sums",
             "desc": "Numbers outside the grid indicate the sum of the first X digits, where X is the closest digit inside the grid"
         },
         {
             "id": "modCells",
             "name": "Modifier Cells",
+            "sheet": "Modifier Cells (some cells' values differ from their placed digit)",
             "desc": "Some cells have a different value than the digit they contain"
         },
         {
             "id": "differentDigits",
             "name": "Unusual Digits",
+            "sheet": "Unusual Digits (eg. not the typical digits 1 to 9, or 1 to 6, etc.)",
             "desc": "Puzzle uses different digits than usual"
         },
         {
             "id": "evenOdd",
             "name": "Even & Odd",
+            "sheet": "Even & Odd",
             "desc": "There's a clue that dictates some cells be odd or even"
         },
         {
             "id": "minMax",
             "name": "Minimum or Maximum",
+            "sheet": "Minimum or Maximum Cells",
             "desc": "A gray cell with 4 small arrows is either higher than every neighbor or lower, depending on the arrows' orientation"
         },
         {
             "id": "fog",
             "name": "Fog",
+            "sheet": "Fog",
             "desc": "The grid is partially obscured by fog that clears as digits are placed"
         },
         {
             "id": "antiknight",
             "name": "Anti-Knight",
+            "sheet": "Anti-Knight",
             "desc": "A digit can't be within a chess knight's move of itself"
         },
         {
             "id": "antiking",
             "name": "Anti-King",
+            "sheet": "Anti-King",
             "desc": "A digit can't be within a chess king's move of itself"
         },
         {
             "id": "adjacency",
             "name": "Adjacency Restriction",
+            "sheet": "Adjacency Restriction (eg. adjacent digits can't sum to 5)",
             "desc": "There is some kind of limitation on what values can go in any two adjacent cells"
         },
         {
             "id": "path",
             "name": "Pathing",
+            "sheet": "Solver must draw a path",
             "desc": "The solver must draw a path or loop based on some criteria"
         },
         {
             "id": "shade",
             "name": "Shading",
+            "sheet": "Solver must shade some cells",
             "desc": "The solver must color cells based on some criteria"
         },
         {
             "id": "misc",
             "name": "Unique",
+            "sheet": "Some other unique rule (only select if said rule is major and not similar to any existing tag)",
             "desc": "The main component of this puzzle can't be explained with existing tags"
         }
     ]
