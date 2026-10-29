@@ -12,7 +12,6 @@ let censor = false;
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
 import * as SL from "./SaveLoad.js";
-import { puzzleRerolls } from "./SaveLoad.js";
 
 
 
@@ -303,7 +302,8 @@ client.items.on("hintsInitialized", (h) => {
 
 function updateConnectButton() {
     if(document.getElementById("input-address").value && document.getElementById("input-username").value) {
-        document.getElementById("controls-connect").removeAttribute("disabled");
+        if(!connected)
+            document.getElementById("controls-connect").removeAttribute("disabled");
         return true;
     }
     document.getElementById("controls-connect").setAttribute("disabled", 1);
@@ -323,6 +323,7 @@ function updateForDisconnect() {
     connected = false;
     setTopMenuState(menuStates.fixed);
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
+    document.getElementById("controls-connect").removeAttribute("disabled");
 }
 
 function login(isReconnect) {
@@ -347,8 +348,10 @@ function login(isReconnect) {
             address = addressIn;
             username = usernameIn;
             connected = true;
-            console.log(slotData);
+
+            // update top bar
             document.getElementById("controls-disconnect").removeAttribute("disabled");
+            document.getElementById("controls-connect").setAttribute("disabled", true);
             setTopMenuState(menuStates.collapsed);
             
             let subMsg = `${censor ? "" : `to ${addressIn}`} as ${usernameIn}`;
@@ -408,17 +411,13 @@ function toggleCensor(connected, address, username) {
 
     let elem = document.getElementById("top-text");
     if(connected) {
-        if(censor) 
-            elem.innerText = `Connected as ${username}`;
-        else 
-            elem.innerText = `Connected to ${address} as ${username}`;
+        let subMsg = `${censor ? "" : `to ${address}`} as ${username}`;
+        updateTopBar(topBarStates.connected, `Connected ${subMsg}`);
     }
-    if(censor) {
+    if(censor)
         document.getElementById("input-address").setAttribute("type", "password");
-    }
-    else {
+    else
         document.getElementById("input-address").setAttribute("type", "text");
-    }
 }
 
 function toggleShowPassword() {

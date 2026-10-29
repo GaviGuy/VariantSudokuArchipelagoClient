@@ -5,7 +5,8 @@
 
 #chat-log {
     width: 100%;
-    max-width: calc(100vw - 20rem);
+    max-width: calc(100vw - 2rem);
+    min-height: 8rem;
     height: calc(100vh - 24em);
     overflow-y: scroll;
     border-bottom: 2px solid #555;

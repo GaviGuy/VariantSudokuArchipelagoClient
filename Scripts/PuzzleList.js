@@ -25,14 +25,6 @@ export function getPuzzleById(id) {
 }
 
 export function updatePuzzleList() {
-    const wawa = (() => {
-        let ret = [];
-        for(let i in TAGS) {
-            ret.push(TAGS[i].id);
-        }
-        console.log(ret);
-    });
-    wawa();
     let listElem = document.getElementById("tab1-list");
     listElem.innerHTML = "";
 

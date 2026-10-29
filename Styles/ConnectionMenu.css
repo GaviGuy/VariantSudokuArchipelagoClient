@@ -31,7 +31,7 @@
     top: 2.5rem;
     margin: 0;
     z-index: 4999;
-    background-color: color-mix(in srgb, var(--color-bg) 90%, #FFFFFF00);
+    background-color: color-mix(in srgb, color-mix(in srgb, var(--color-bg) 90%, var(--color-connection)) 70%, #0000);
     border-bottom: 2px solid var(--color-main);
 }
 
@@ -58,15 +58,51 @@
     display: block;
     position: fixed;
     top: 9.5rem;
-    margin-left: 4rem;
-    margin-top: 0.5rem;
+    left: 4rem;
+
+    background-color: color-mix(in srgb, var(--color-bg) 91%, var(--color-connection));
+    border: 1px solid #000;
+    border-radius: 4px;
 }
 
 #top-menu[state="1"]>#top-arrow {
     display: block;
     position: fixed;
-    top: 0.625rem;
-    margin-left: 4rem;
+    top: 1.5rem;
+    left: 4rem;
     margin-top: 0;
     padding-top: 0;
+    
+    background-color: var(--color-connection);
+    border: none;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-radius: 4px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#top-menu[state="0"]>#top-arrow {
+    display: none;
+}
+
+
+#top-menu>#top-arrow:hover {
+    background-color: color-mix(in srgb, var(--color-connection) 10%, #DDD);
+}
+
+#top-menu[state="1"]>#top-arrow:hover {
+    background-color: color-mix(in srgb, var(--color-connection) 80%, Black);
+}
+
+#top-menu[state="1"]>#top-arrow::after {
+    display: block;
+    content: "v";
+}
+
+#top-menu[state="0"]>#top-arrow::before, #top-menu[state="2"]>#top-arrow::before {
+    display: block;
+    content: "v";
+    rotate: 180deg;
 }

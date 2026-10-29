@@ -1,6 +1,7 @@
 body {
     --color-bg: #FFFFFF;
     --color-main: #220;
+    --color-connection: #DDD;
     margin: 0;
 }
 

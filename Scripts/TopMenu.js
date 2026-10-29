@@ -27,7 +27,6 @@ function printChatMessage(message) {
     let newElem = document.createElement("div");
     newElem.textContent = message;
     elem.appendChild(newElem);
-    console.log(message);
 
     let chatLog = document.getElementById("chat-log");
     chatLog.scrollTop += newElem.clientHeight + 1;
@@ -41,6 +40,12 @@ const topBarStates = {
 }
 
 function updateTopBar(index, message) {
-    document.getElementById("connection-info").setAttribute("state", index);
+    const COLORS = ["#DDD", "#DC0", "#2E2", "#B44"]
+    document.body.style.setProperty("--color-connection", COLORS[index]);
     document.getElementById("top-text").innerText = message;
+    
+    if(index == 2)
+        document.getElementById("top-disconnect").setAttribute("show", true);
+    else 
+        document.getElementById("top-disconnect").removeAttribute("show");
 }
