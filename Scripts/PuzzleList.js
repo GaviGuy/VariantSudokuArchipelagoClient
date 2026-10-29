@@ -52,6 +52,11 @@ export function updatePuzzleList() {
         debugButtonElem.innerText = "debug";
         debugButtonElem.addEventListener("click", (e) => {
             console.log(AP.solvedIds);
+            let wawa = [];
+            for(let i in TAGS) {
+                wawa.push(TAGS[i].name);
+            }
+            console.log(wawa);
         });
         listElem.appendChild(debugButtonElem);
     }

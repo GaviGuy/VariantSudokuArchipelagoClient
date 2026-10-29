@@ -56,6 +56,16 @@
             "desc": "Arrowed numbers outside the grid denote the sum of all cells along their pointed lines"
         },
         {
+            "id": "fastThermo",
+            "name": "Thermometer",
+            "desc": "Digits on a thermometer must strictly increase from bulb to tip"
+        },
+        {
+            "id": "slowThermo",
+            "name": "Slow Thermometer",
+            "desc": "Digits on a thermometer must not decrease from bulb to tip"
+        },
+        {
             "id": "arrow",
             "name": "Arrow",
             "desc": "The digits on an arrow sum to the value in the attached circle"
@@ -112,6 +122,11 @@
             "desc": "A diagonal line going from corner to corner must have one of every digit"
         },
         {
+            "id": "otherLine",
+            "name": "Other Line",
+            "desc": "There's a line that places some kind of restriction on some digits"
+        },
+        {
             "id": "irregular",
             "name": "Irregular",
             "desc": "Regions boundaries are irregularly shaped"
@@ -120,16 +135,6 @@
             "id": "chaosConstruct",
             "name": "Chaos Construction",
             "desc": "Region boundaries are irregularly shaped and must be deduced by the solver"
-        },
-        {
-            "id": "fastThermo",
-            "name": "Thermometer",
-            "desc": "Digits on a thermometer must strictly increase from bulb to tip"
-        },
-        {
-            "id": "slowThermo",
-            "name": "Slow Thermometer",
-            "desc": "Digits on a thermometer must not decrease from bulb to tip"
         },
         {
             "id": "skyscraper",
