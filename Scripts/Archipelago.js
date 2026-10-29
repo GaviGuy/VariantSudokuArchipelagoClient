@@ -98,17 +98,21 @@ function initialize() {
             if(updateConnectButton() && e.key === "Enter" || e.keyCode === 13)
                 login();
     });
+    document.getElementById("controls-censor").addEventListener("click",
+        () => toggleCensor(connected, address, username));
+
     document.getElementById("input-password").addEventListener("keyup",
         (e) => {
             if(updateConnectButton() && e.key === "Enter" || e.keyCode === 13)
                 login();
     });
+    document.getElementById("password-censor").addEventListener("click",
+        () => toggleShowPassword(connected, address, username));
+
     document.getElementById("top-disconnect").addEventListener("click",
         () => disconnect());
     document.getElementById("controls-disconnect").addEventListener("click",
         () => disconnect());
-    document.getElementById("controls-censor").addEventListener("click",
-        () => toggleCensor(connected, address, username));
         
     // initialize chat controls
     document.getElementById("chat-input").addEventListener("keyup",
@@ -123,14 +127,6 @@ function initialize() {
     // initialize other controls
     document.getElementById("top-arrow").addEventListener("click",
         () => handleTopArrow());
-
-
-    document.addEventListener("keyup",
-        (e) => {
-            if(e.key === "p") {
-                console.log(client.authenticated);
-            }
-    });
 
     // why is this necessary :(
     setTopMenuState(menuStates.open);
@@ -355,8 +351,8 @@ function login(isReconnect) {
             document.getElementById("controls-disconnect").removeAttribute("disabled");
             setTopMenuState(menuStates.collapsed);
             
-            let subMsg = `${addressIn}${censor ? "" : ` as ${usernameIn}`}`;
-            updateTopBar(topBarStates.connected, `Connected to ${subMsg}`);
+            let subMsg = `${censor ? "" : `to ${addressIn}`} as ${usernameIn}`;
+            updateTopBar(topBarStates.connected, `Connected ${subMsg}`);
 
             // load data
             readLocalItems();
@@ -422,6 +418,19 @@ function toggleCensor(connected, address, username) {
     }
     else {
         document.getElementById("input-address").setAttribute("type", "text");
+    }
+}
+
+function toggleShowPassword() {
+    let elem = document.getElementById("input-password");
+    let btn = document.getElementById("password-censor");
+    if(elem.getAttribute("type") == "password") {
+        btn.innerText = "o";
+        elem.setAttribute("type", "text");
+    }
+    else {
+        btn.innerText = "x";
+        elem.setAttribute("type", "password");
     }
 }
 
