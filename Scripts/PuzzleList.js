@@ -106,7 +106,8 @@ export function canAccessBoss() {
 }
 
 function checkSolution(puzzle, solution) {
-    if(puzzle.solutionCode == solution)
+    let solutionHash = AP.cyrb53(puzzle.title + solution)
+    if(puzzle.solutionHash == solutionHash)
         return true;
     return false;
 }

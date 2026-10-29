@@ -1,7 +1,6 @@
 {
     "vers": "0.0",
-    "tagsVers": "0.1",
-    "noteToSelf": "i should probably use salts of solution codes so there's no cheat reference online",
+    "tagsVers": "0.2",
     "puzzles": [
         {
             "title": "Serial Sums",
@@ -9,11 +8,14 @@
             "id": 1000,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MDP",
             "rating": 1,
-            "duration": "22:38",
-            "tags": ["renban", "kropkiBlack", "kropkiWhite", "killerCage"],
-            "hints": [],
+            "tags": [
+                "renban",
+                "kropkiBlack",
+                "kropkiWhite",
+                "killerCage"
+            ],
             "solutionHint": "Row 8 (left to right)",
-            "solutionCode": "791432865"
+            "solutionHash": 247588940667880
         },
         {
             "title": "Hungry Sevens",
@@ -21,11 +23,14 @@
             "id": 1010,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MEA",
             "rating": 1,
-            "duration": "9:58",
-            "tags": ["evenOdd", "kropkiBlack", "kropkiWhite", "miscPos"],
-            "hints": [],
+            "tags": [
+                "evenOdd",
+                "kropkiBlack",
+                "kropkiWhite",
+                "misc"
+            ],
             "solutionHint": "Row 7 (left to right)",
-            "solutionCode": "64851372"
+            "solutionHash": 8179123328400248
         },
         {
             "title": "Whirlwind",
@@ -33,11 +38,14 @@
             "id": 1020,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000MJQ",
             "rating": 2,
-            "duration": "26:16",
-            "tags": ["kropkiBlack", "kropkiWhite", "fiveTen", "miscPattern"],
-            "hints": [],
+            "tags": [
+                "kropkiBlack",
+                "kropkiWhite",
+                "fiveTen",
+                "otherLine"
+            ],
             "solutionHint": "Column 9 (top to bottom)",
-            "solutionCode": "487936125"
+            "solutionHash": 355665744774953
         },
         {
             "title": "A Few Odd Sums",
@@ -45,11 +53,13 @@
             "id": 1030,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N5J",
             "rating": 1,
-            "duration": "27:15",
-            "tags": ["regionSum", "kropkiWhite", "killerCage"],
-            "hints": [],
+            "tags": [
+                "regionSum",
+                "kropkiWhite",
+                "killerCage"
+            ],
             "solutionHint": "Box 1 (normal reading order)",
-            "solutionCode": "628739451"
+            "solutionHash": 8302356716246479
         },
         {
             "title": "Cinna-mod Rolls",
@@ -57,11 +67,14 @@
             "id": 1040,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000N8L",
             "rating": 2,
-            "duration": "34:59",
-            "tags": ["modular", "kropkiWhite", "kropkiBlack", "fiveTen"],
-            "hints": [],
+            "tags": [
+                "modular",
+                "kropkiWhite",
+                "kropkiBlack",
+                "fiveTen"
+            ],
             "solutionHint": "Column 1 (top to bottom)",
-            "solutionCode": "681237549"
+            "solutionHash": 2700723054364719
         },
         {
             "title": "Modular Fog",
@@ -69,11 +82,16 @@
             "id": 1050,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NCH",
             "rating": 1,
-            "duration": "12:42",
-            "tags": ["modular", "fog", "kropkiBlack", "kropkiWhite", "fiveTen", "killerCage"],
-            "hints": [],
+            "tags": [
+                "modular",
+                "fog",
+                "kropkiBlack",
+                "kropkiWhite",
+                "fiveTen",
+                "killerCage"
+            ],
             "solutionHint": "Row 9 (left to right)",
-            "solutionCode": "762195438"
+            "solutionHash": 7146903264480553
         },
         {
             "title": "Superimposed Sums",
@@ -81,11 +99,13 @@
             "id": 1060,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NPL",
             "rating": 2,
-            "duration": "25:37",
-            "tags": ["regionSum", "renban", "kropkiWhite"],
-            "hints": [],
+            "tags": [
+                "regionSum",
+                "renban",
+                "kropkiWhite"
+            ],
             "solutionHint": "Column 1 (top to bottom)",
-            "solutionCode": "139867524"
+            "solutionHash": 1578920467532710
         },
         {
             "title": "Angled Sets",
@@ -93,11 +113,13 @@
             "id": 1070,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000NY3",
             "rating": 3,
-            "duration": "84:43",
-            "tags": ["renban", "killerCage", "kropkiBlack"],
-            "hints": [],
+            "tags": [
+                "renban",
+                "killerCage",
+                "kropkiBlack"
+            ],
             "solutionHint": "Row 5 (left to right)",
-            "solutionCode": "546179382"
+            "solutionHash": 2583363066351279
         },
         {
             "title": "Synergistic Sums",
@@ -105,11 +127,12 @@
             "id": 1080,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000PQJ",
             "rating": 1,
-            "duration": "33:02",
-            "tags": ["killerCage", "arrow"],
-            "hints": [],
+            "tags": [
+                "killerCage",
+                "arrow"
+            ],
             "solutionHint": "Box 1 (normal reading order)",
-            "solutionCode": "847915263"
+            "solutionHash": 4133044626694641
         },
         {
             "title": "Centerpiece",
@@ -117,11 +140,14 @@
             "id": 1090,
             "link": "https://logic-masters.de/Raetselportal/Raetsel/zeigen.php?id=000Q5W",
             "rating": 3,
-            "duration": "66:12",
-            "tags": ["entropic", "germanWhisper", "fiveTen", "kropkiWhite"],
-            "hints": [],
+            "tags": [
+                "entropic",
+                "germanWhisper",
+                "fiveTen",
+                "kropkiWhite"
+            ],
             "solutionHint": "Column 9 (top to bottom)",
-            "solutionCode": "915876342"
+            "solutionHash": 6431555319294204
         }
     ],
     "otherpuzzles": [
