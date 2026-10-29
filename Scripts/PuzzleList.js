@@ -25,6 +25,14 @@ export function getPuzzleById(id) {
 }
 
 export function updatePuzzleList() {
+    const wawa = (() => {
+        let ret = [];
+        for(let i in TAGS) {
+            ret.push(TAGS[i].id);
+        }
+        console.log(ret);
+    });
+    wawa();
     let listElem = document.getElementById("tab1-list");
     listElem.innerHTML = "";
 
@@ -54,7 +62,7 @@ export function updatePuzzleList() {
     for(let i in playables) {
         if(AP.slotData["bossUnlock"] == 2 && AP.slotData["pillarIds"].includes(playables[i]))
             pillar.push(playables[i]);
-        else
+        else if(playables[i] != AP.slotData.bossId)
             filler.push(playables[i]);
     }
 
@@ -119,7 +127,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let titleElem = document.createElement("a");
     titleElem.classList.add("puzzle-title");
     titleElem.setAttribute("href", puzzle.link);
-    titleElem.setAttribute("target", "__blank");
+    titleElem.setAttribute("target", "_blank");
     titleElem.innerText = puzzle.title;
     topElem.appendChild(titleElem);
 

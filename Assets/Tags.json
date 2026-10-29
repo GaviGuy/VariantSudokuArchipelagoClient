@@ -1,10 +1,15 @@
 {
-    "vers": "0.1",
+    "vers": "0.2",
     "tags": [
         {
             "id": "vanilla",
             "name": "Vanilla",
             "desc": "Ordinary sudoku. No other rules apply"
+        },
+        {
+            "id": "notSudoku",
+            "name": "Something Else",
+            "desc": "This puzzle isn't sudoku, and doesn't abide by normal sudoku rules"
         },
         {
             "id": "kropkiBlack",
@@ -21,6 +26,25 @@
             "img": "kropkiWhite3.png"
         },
         {
+            "id": "fiveTen",
+            "name": "V and X Sums",
+            "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
+            "neg": "All V's and X's are given",
+            "img": "fiveTen.png"
+        },
+        {
+            "id": "quads",
+            "name": "Quadruples",
+            "desc": "Numbers inside a dot centered on 4 cells indicate which digits must appear at least once in those 4 cells",
+            "img": "fiveTen.png"
+        },
+        {
+            "id": "circles",
+            "name": "Counting Circles",
+            "desc": "A digit inside a circle indicates how many times that digit appears in a circle",
+            "img": "fiveTen.png"
+        },
+        {
             "id": "killerCage",
             "name": "Killer Cage",
             "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage",
@@ -32,26 +56,14 @@
             "desc": "Arrowed numbers outside the grid denote the sum of all cells along their pointed lines"
         },
         {
-            "id": "fiveTen",
-            "name": "V and X Sums",
-            "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
-            "neg": "All V's and X's are given",
-            "img": "fiveTen.png"
-        },
-        {
             "id": "arrow",
             "name": "Arrow",
             "desc": "The digits on an arrow sum to the value in the attached circle"
         },
         {
-            "id": "antiknight",
-            "name": "Anti-Knight",
-            "desc": "A digit can't be within a chess knight's move of itself"
-        },
-        {
-            "id": "antiking",
-            "name": "Anti-King",
-            "desc": "A digit can't be within a chess king's move of itself"
+            "id": "doubleArrow",
+            "name": "Double Arrow",
+            "desc": "The digits on two connected circles and the digits on the line between them sum to the same value"
         },
         {
             "id": "renban",
@@ -95,6 +107,11 @@
             "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards"
         },
         {
+            "id": "diagonal",
+            "name": "Diagonals",
+            "desc": "A diagonal line going from corner to corner must have one of every digit"
+        },
+        {
             "id": "irregular",
             "name": "Irregular",
             "desc": "Regions boundaries are irregularly shaped"
@@ -120,6 +137,16 @@
             "desc": "Numbers outside the grid indicate how many digits are visible when looking into the grid. Digits block visibility of lower digits behind them"
         },
         {
+            "id": "sandwich",
+            "name": "Sandwich Sums",
+            "desc": "Numbers outside the grid indicate the sum of the digits located between 2 specific digits"
+        },
+        {
+            "id": "xSum",
+            "name": "X Sums",
+            "desc": "Numbers outside the grid indicate the sum of the first X digits, where X is the closest digit inside the grid"
+        },
+        {
             "id": "modCells",
             "name": "Modifier Cells",
             "desc": "Some cells have a different value than the digit they contain"
@@ -130,6 +157,36 @@
             "desc": "Puzzle uses different digits than usual"
         },
         {
+            "id": "evenOdd",
+            "name": "Even & Odd",
+            "desc": "There's a clue that dictates some cells be odd or even"
+        },
+        {
+            "id": "minMax",
+            "name": "Minimum or Maximum",
+            "desc": "A gray cell with 4 small arrows is either higher than every neighbor or lower, depending on the arrows' orientation"
+        },
+        {
+            "id": "fog",
+            "name": "Fog",
+            "desc": "The grid is partially obscured by fog that clears as digits are placed"
+        },
+        {
+            "id": "antiknight",
+            "name": "Anti-Knight",
+            "desc": "A digit can't be within a chess knight's move of itself"
+        },
+        {
+            "id": "antiking",
+            "name": "Anti-King",
+            "desc": "A digit can't be within a chess king's move of itself"
+        },
+        {
+            "id": "adjacency",
+            "name": "Adjacency Restriction",
+            "desc": "There is some kind of limitation on what values can go in any two adjacent cells"
+        },
+        {
             "id": "path",
             "name": "Pathing",
             "desc": "The solver must draw a path or loop based on some criteria"
@@ -138,31 +195,6 @@
             "id": "shade",
             "name": "Shading",
             "desc": "The solver must color cells based on some criteria"
-        },
-        {
-            "id": "evenOdd",
-            "name": "Even & Odd",
-            "desc": "There's a clue that dictates some cells be odd or even"
-        },
-        {
-            "id": "fog",
-            "name": "Dynamic Fog",
-            "desc": "The grid is partially obscured by fog that clears as digits are placed"
-        },
-        {
-            "id": "miscPos",
-            "name": "Position Clue",
-            "desc": "There's a unique clue that limits cell values based on their position"
-        },
-        {
-            "id": "miscMath",
-            "name": "Math Clue",
-            "desc": "There's a unique clue that limits cell values based on math"
-        },
-        {
-            "id": "miscPattern",
-            "name": "Pattern Clue",
-            "desc": "There's a unique clue that limits cell values based on a pattern"
         },
         {
             "id": "misc",

@@ -131,6 +131,9 @@ function initialize() {
                 console.log(client.authenticated);
             }
     });
+
+    // why is this necessary :(
+    setTopMenuState(menuStates.open);
     setTopMenuState(menuStates.fixed);
     updateConnectButton();
 }
@@ -352,7 +355,7 @@ function login(isReconnect) {
             document.getElementById("controls-disconnect").removeAttribute("disabled");
             setTopMenuState(menuStates.collapsed);
             
-            let subMsg = `${addressIn}${censor ? "" : `as ${usernameIn}`}`;
+            let subMsg = `${addressIn}${censor ? "" : ` as ${usernameIn}`}`;
             updateTopBar(topBarStates.connected, `Connected to ${subMsg}`);
 
             // load data
@@ -415,11 +418,9 @@ function toggleCensor(connected, address, username) {
             elem.innerText = `Connected to ${address} as ${username}`;
     }
     if(censor) {
-        document.getElementById("input-password").setAttribute("type", "password");
         document.getElementById("input-address").setAttribute("type", "password");
     }
     else {
-        document.getElementById("input-password").setAttribute("type", "text");
         document.getElementById("input-address").setAttribute("type", "text");
     }
 }
