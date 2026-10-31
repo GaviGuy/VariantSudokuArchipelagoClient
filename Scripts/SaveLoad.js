@@ -25,6 +25,8 @@ export function saveGame() {
 
     if(AP.solvedIds.length > 0)
         saveObject.solvedIds = AP.solvedIds;
+    if(AP.rerolls.length > 0)
+        saveObject.rerolls = AP.rerolls;
     
     //only make a save if there's any data to save
     if(Object.keys(saveObject).length > 0) {
@@ -41,6 +43,7 @@ export function loadGame() {
     if(!saveObject) return;
 
     if(saveObject.solvedIds) AP.setSolvedIds(saveObject.solvedIds);
+    if(saveObject.rerolls) AP.setRerolls(saveObject.rerolls);
 }
 
 

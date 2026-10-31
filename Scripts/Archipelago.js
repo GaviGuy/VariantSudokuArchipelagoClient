@@ -7,13 +7,72 @@ export let debugMode = false;
 export let totalPuzzleCount = 0;
 export let allPuzzleIds = [];
 export let solvedIds = [];
+export let rerolls = [];
 let censor = false;
 
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
 import * as SL from "./SaveLoad.js";
 
+export function getAvailableRerolls() {
+    let ret = 0;
+    for(let i in localItems) {
+        if(localItems[i].name == "Puzzle Reroll") {
+            ret++;
+        }
+    }
+    return ret - rerolls.length;
+}
 
+export function getValidRerollTarget(puzzle, minDiff, maxDiff) {
+    console.log(minDiff);
+    console.log(maxDiff);
+    if(minDiff < 1) minDiff = 1;
+    if(maxDiff > 5) maxDiff = 5;
+    
+    let valid = [];
+    for(let i in PL.PUZZLES) {
+        // skip puzzles not in range
+        if(PL.PUZZLES[i].rating < minDiff) continue;
+        if(PL.PUZZLES[i].rating > maxDiff) continue;
+
+        // skip puzzles in the generation
+        if(allPuzzleIds.includes(PL.PUZZLES[i].id)) continue;
+
+        // skip puzzles previously rolled
+        let found = false;
+        for(let j in rerolls) {
+            if(rerolls[j].dest == PL.PUZZLES[i].id) {
+                found = true;
+                break;
+            }
+        }
+        if(found) continue;
+
+        valid.push(PL.PUZZLES[i]);
+    }
+    if(valid.length == 0) return;
+
+    console.warn(valid);
+    
+    // only the best random seeds on the market
+    const rand = cyrb53(puzzle.id + "wawa" + rerolls.length, client.room.seed) % valid.length;
+    return valid[rand];
+}
+
+export function rerollPuzzle(puzzle) {
+    if(getAvailableRerolls() < 1) return;
+    const newPuzzle = getValidRerollTarget(puzzle, puzzle.rating-1, puzzle.rating);
+    if(!newPuzzle) {
+        printChatMessage("No valid puzzles to reroll to");
+        return;
+    }
+    rerolls.push({
+        source: puzzle.id,
+        dest: newPuzzle.id
+    });
+    PL.updatePuzzleList();
+}
 
 function initDebugHotkeys() {
     document.addEventListener("keydown", (e) => {
@@ -155,7 +214,15 @@ function sendChatMessage() {
     chatBar.value = "";
 }
 
+export function getPuzzleById(id) {
+    for(let i in PL.PUZZLES) {
+        if(PL.PUZZLES[i].id == id)
+            return PL.PUZZLES[i];
+    }
+}
+
 export function sendLocations(puzzle) {
+    console.log(puzzle);
     if(!(solvedIds.includes(puzzle.id)))
         solvedIds.push(puzzle.id);
     if(debugMode) console.log(solvedIds);
@@ -461,6 +528,10 @@ function toggleShowPassword() {
 // helpers for saving and loading
 export function setSolvedIds(newIds) {
     solvedIds = newIds;
+}
+
+export function setRerolls(newRerolls) {
+    rerolls = newRerolls;
 }
 
 // string hashing function taken from

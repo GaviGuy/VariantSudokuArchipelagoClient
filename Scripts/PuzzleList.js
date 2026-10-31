@@ -118,6 +118,20 @@ function checkSolution(puzzle, solution) {
 }
 
 function createPuzzleCard(puzzle, puzzleType, solved) {
+    // handle rerolls
+    let originalPuzzle = puzzle;
+    while(true) {
+        let found = false;
+        for(let i in AP.rerolls) {
+            if(AP.rerolls[i].source == puzzle.id) {
+                puzzle = getPuzzleById(AP.rerolls[i].dest);
+                found = true;
+                break;
+            }
+        }
+        if(!found) break;
+    }
+
     const PUZZLE_CLASSES = ["filler", "pillar", "boss"];
 
     let retElem = document.createElement("div");
@@ -139,6 +153,13 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     authorElem.innerText = puzzle.author;
     topElem.appendChild(authorElem);
 
+    let ratingElem = document.createElement("span");
+    let stars = "";
+    for(let _ = 0; _ < puzzle.rating; _++)
+        stars += "*";
+    ratingElem.innerText = stars;
+    topElem.appendChild(ratingElem);
+
     let bottomElem = document.createElement("div");
     bottomElem.classList.add("puzzle-bottom");
 
@@ -154,7 +175,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
             if(e.key === "Enter") {
                 let code = solutionInput.value;
                 if(checkSolution(puzzle, code)) {
-                    AP.sendLocations(puzzle)
+                    AP.sendLocations(originalPuzzle);
                 }
                 else {
                     console.warn("incorrect solution: " + code);
@@ -162,6 +183,17 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
             }
         });
         solutionElem.appendChild(solutionInput);
+        
+        if(AP.getAvailableRerolls() > 0) {
+            let rerollElem = document.createElement("button");
+            rerollElem.addEventListener("click", (() => {
+                if(confirm(`Spend a Puzzle Reroll? You have ${AP.getAvailableRerolls()}.`)) {
+                    AP.rerollPuzzle(puzzle);
+                }
+            }));
+            rerollElem.innerText = "Reroll";
+            solutionElem.appendChild(rerollElem);
+        }
     }
     else {
         let solvedElem = document.createElement("span");
@@ -175,7 +207,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         let autosolve = document.createElement("button");
         autosolve.textContent = "h";
         autosolve.addEventListener("click", () => {
-            AP.sendLocations(puzzle);
+            AP.sendLocations(originalPuzzle);
         });
         solutionElem.appendChild(autosolve);
     }
