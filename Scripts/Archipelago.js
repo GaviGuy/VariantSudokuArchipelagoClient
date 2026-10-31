@@ -6,8 +6,11 @@ export let slotData, address, username, connected;
 export let debugMode = false;
 export let totalPuzzleCount = 0;
 export let allPuzzleIds = [];
-export let solvedIds = [];
-export let rerolls = [];
+export let save = {
+    solvedIds: [],
+    rerolls: [],
+    lastItemId: 0
+};
 let censor = false;
 
 import buildDashboard from "./Dashboard.js";
@@ -21,12 +24,15 @@ export function getAvailableRerolls() {
             ret++;
         }
     }
-    return ret - rerolls.length;
+    return ret - save.rerolls.length;
+}
+
+export function updateInterface() {
+    buildDashboard();
+    PL.updatePuzzleList();
 }
 
 export function getValidRerollTarget(puzzle, minDiff, maxDiff) {
-    console.log(minDiff);
-    console.log(maxDiff);
     if(minDiff < 1) minDiff = 1;
     if(maxDiff > 5) maxDiff = 5;
     
@@ -41,8 +47,8 @@ export function getValidRerollTarget(puzzle, minDiff, maxDiff) {
 
         // skip puzzles previously rolled
         let found = false;
-        for(let j in rerolls) {
-            if(rerolls[j].dest == PL.PUZZLES[i].id) {
+        for(let j in save.rerolls) {
+            if(save.rerolls[j].dest == PL.PUZZLES[i].id) {
                 found = true;
                 break;
             }
@@ -52,11 +58,9 @@ export function getValidRerollTarget(puzzle, minDiff, maxDiff) {
         valid.push(PL.PUZZLES[i]);
     }
     if(valid.length == 0) return;
-
-    console.warn(valid);
     
     // only the best random seeds on the market
-    const rand = cyrb53(puzzle.id + "wawa" + rerolls.length, client.room.seed) % valid.length;
+    const rand = cyrb53(puzzle.id + "wawa" + save.rerolls.length, client.room.seed) % valid.length;
     return valid[rand];
 }
 
@@ -67,11 +71,12 @@ export function rerollPuzzle(puzzle) {
         printChatMessage("No valid puzzles to reroll to");
         return;
     }
-    rerolls.push({
+    save.rerolls.push({
         source: puzzle.id,
         dest: newPuzzle.id
     });
     PL.updatePuzzleList();
+    SL.saveGame();
 }
 
 function initDebugHotkeys() {
@@ -111,8 +116,8 @@ export function getPlayableIds(pillarsOnly) {
 
 export function getUnsolvedPlayableIds(pillarsOnly) {
     let ret = getPlayableIds(pillarsOnly);
-    for(let i in solvedIds) {
-        const ind = ret.indexOf(solvedIds[i])
+    for(let i in save.solvedIds) {
+        const ind = ret.indexOf(save.solvedIds[i])
         if(ind > -1) {
             ret.splice(ind, 1);
         }
@@ -123,7 +128,7 @@ export function getUnsolvedPlayableIds(pillarsOnly) {
 export function getNumberPillarSolved() {
     let ret = 0;
     for(let i in slotData.pillarIds) {
-        if(solvedIds.includes(slotData.pillarIds[i]))
+        if(save.solvedIds.includes(slotData.pillarIds[i]))
             ret++;
     }
     return ret;
@@ -223,9 +228,9 @@ export function getPuzzleById(id) {
 
 export function sendLocations(puzzle) {
     console.log(puzzle);
-    if(!(solvedIds.includes(puzzle.id)))
-        solvedIds.push(puzzle.id);
-    if(debugMode) console.log(solvedIds);
+    if(!(save.solvedIds.includes(puzzle.id)))
+        save.solvedIds.push(puzzle.id);
+    if(debugMode) console.log(save.solvedIds);
 
     if(puzzle.id == (slotData["bossId"])) {
         if(debugMode) console.log("Goaled!");
@@ -246,11 +251,11 @@ export function sendLocations(puzzle) {
 export function checkBonus() {
 
     // get number of puzzles solved (or number of pillars, in pillar mode)
-    let solves = solvedIds.length;
+    let solves = save.solvedIds.length;
     if(slotData.bossUnlock == 2) {
         solves = 0;
         for(let i in slotData.pillarIds) {
-            if(solvedIds.includes(slotData.pillarIds[i]))
+            if(save.solvedIds.includes(slotData.pillarIds[i]))
                 solves++;
         }
     }
@@ -398,6 +403,8 @@ function updateForDisconnect() {
     slotData = null;
     username = null;
     connected = false;
+    resetSave();
+    updateInterface();
     setTopMenuState(menuStates.fixed);
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
     document.getElementById("controls-connect").removeAttribute("disabled");
@@ -483,8 +490,8 @@ function readLocalItems() {
     }
 }
 
-window.onerror = () => {
-    console.log('got an error');
+window.onerror = (e) => {
+    console.error(e);
     return false;
 }
 
@@ -525,15 +532,6 @@ function toggleShowPassword() {
     }
 }
 
-// helpers for saving and loading
-export function setSolvedIds(newIds) {
-    solvedIds = newIds;
-}
-
-export function setRerolls(newRerolls) {
-    rerolls = newRerolls;
-}
-
 // string hashing function taken from
 // https://github.com/bryc/code/blob/master/jshash/experimental/cyrb53.js
 export const cyrb53 = (str, seed = 0) => {
@@ -550,3 +548,10 @@ export const cyrb53 = (str, seed = 0) => {
   
     return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
+
+function resetSave() {
+    localItems = [];
+    save.solvedIds = [];
+    save.rerolls = [];
+    save.lastItemId = 0;
+}

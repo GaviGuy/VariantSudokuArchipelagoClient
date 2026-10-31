@@ -9,7 +9,7 @@ export function buildDashboard() {
         // Report current status
         let statusElem = document.createElement("div");
 
-        if(AP.solvedIds.includes(AP.slotData.bossId)) {
+        if(AP.save.solvedIds.includes(AP.slotData.bossId)) {
             if(canAccessBoss()) {
                 statusElem.innerText = "Game cleared!";
                 statusElem.classList.add("go-mode");
@@ -61,7 +61,7 @@ export function buildDashboard() {
                 break;
 
             case 1:
-                prog = AP.solvedIds.length;
+                prog = AP.save.solvedIds.length;
                 goal = AP.slotData.bossUnlockCount;
                 item = "Puzzles Solved"
                 break;

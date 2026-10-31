@@ -1,49 +1,28 @@
 import * as AP from "./Archipelago.js";
 
-export let checkedLocations, puzzleHints, puzzleRerolls;
-
-function getGameHash() {
-    // game hash is based on player name, multiworld seed,
-    //   3 letters from up to 32 slot names, and the # of slots
-    let prehash = AP.client.name;
-    prehash += AP.client.room.seedName;
-    for(let i in AP.client.players) {
-        if(i >= 32) break;
-        prehash += AP.client.players[i].name.slice(0, 3);
-    }
-    prehash += AP.client.players.length;
-    return AP.cyrb53(prehash);
+export function getSaveKey() {
+    return `VariantSudokuSave-${AP.client.players.self.team}-${AP.client.players.self.slot}`;
 }
 
 export function saveGame() {
     let saveObject = {
         //last acknowledged item index (requires implementing item notifications)
-        //# of rerolls (require implementing rerolls)
-        //rerolled puzzles (require implementing rerolls)
-        //hinted puzzles (require implementing hints)
     };
 
-    if(AP.solvedIds.length > 0)
-        saveObject.solvedIds = AP.solvedIds;
-    if(AP.rerolls.length > 0)
-        saveObject.rerolls = AP.rerolls;
-    
-    //only make a save if there's any data to save
-    if(Object.keys(saveObject).length > 0) {
-        localStorage.setItem(`save-${getGameHash()}`, JSON.stringify(saveObject));
-    }
+    if(AP.save.solvedIds.length > 0)
+        saveObject.solvedIds = AP.save.solvedIds;
+    if(AP.save.rerolls.length > 0)
+        saveObject.rerolls = AP.save.rerolls;
+
+    AP.client.storage.prepare(getSaveKey(), {}).update(saveObject).commit(false);
 }
 
 export function loadGame() {
-    //todo: will have to graciously handle if the loaded savedata is incompatible for some reason
-    //eg. if the save says some puzzle has been solved that doesn't exist
-    // with the introduction of saves, I can have hints and puzzle rerolls :D
+    AP.client.storage.fetch(getSaveKey()).then((data) => {
+        if(!data) return;
+        if(data.solvedIds) AP.save.solvedIds = data.solvedIds;
+        if(data.rerolls) AP.save.rerolls = data.rerolls;
 
-    let saveObject = JSON.parse(localStorage.getItem(`save-${getGameHash()}`));
-    if(!saveObject) return;
-
-    if(saveObject.solvedIds) AP.setSolvedIds(saveObject.solvedIds);
-    if(saveObject.rerolls) AP.setRerolls(saveObject.rerolls);
+        AP.updateInterface();
+    });
 }
-
-

@@ -1,4 +1,5 @@
 import * as AP from "./Archipelago.js";
+import {getSaveKey} from "./SaveLoad.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -42,13 +43,10 @@ export function updatePuzzleList() {
 
         let debugButtonElem = document.createElement("button");
         debugButtonElem.innerText = "debug";
-        debugButtonElem.addEventListener("click", (e) => {
-            console.log(AP.solvedIds);
-            let wawa = [];
-            for(let i in TAGS) {
-                wawa.push(TAGS[i].name);
-            }
-            console.log(wawa);
+        debugButtonElem.addEventListener("click", () => {
+            AP.client.storage.fetch(getSaveKey()).then((e) => {
+                console.log(e);
+            });
         });
         listElem.appendChild(debugButtonElem);
 
@@ -73,22 +71,23 @@ export function updatePuzzleList() {
     pillar = pillar.filter((a, b) => pillar.indexOf(a) === b);
 
     for(let i in filler) {
-        let solved = AP.solvedIds.includes(filler[i]);
+        let solved = AP.save.solvedIds.includes(filler[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(filler[i]), 0, solved));
     }
 
     for(let i in pillar) {
-        let solved = AP.solvedIds.includes(pillar[i]);
+        let solved = AP.save.solvedIds.includes(pillar[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(pillar[i]), 1, solved));
     }
 
     if(canAccessBoss()) {
-        let solved = AP.solvedIds.includes(AP.slotData.bossId);
+        let solved = AP.save.solvedIds.includes(AP.slotData.bossId);
         listElem.appendChild(createPuzzleCard(getPuzzleById(AP.slotData.bossId), 2, solved));
     }
 }
 
 export function canAccessBoss() {
+    if(!AP.connected) return false;
     switch(AP.slotData.bossUnlock) {
         // access the boss after getting slotData.bossUnlockCount keypieces
         case 0:
@@ -98,7 +97,7 @@ export function canAccessBoss() {
 
         // access the boss after solving slotData.bossUnlockCount puzzles
         case 1:
-            if(AP.solvedIds.length >= AP.slotData.bossUnlockCount)
+            if(AP.save.solvedIds.length >= AP.slotData.bossUnlockCount)
                 return true;
             return false;
 
@@ -122,9 +121,9 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let originalPuzzle = puzzle;
     while(true) {
         let found = false;
-        for(let i in AP.rerolls) {
-            if(AP.rerolls[i].source == puzzle.id) {
-                puzzle = getPuzzleById(AP.rerolls[i].dest);
+        for(let i in AP.save.rerolls) {
+            if(AP.save.rerolls[i].source == puzzle.id) {
+                puzzle = getPuzzleById(AP.save.rerolls[i].dest);
                 found = true;
                 break;
             }
@@ -139,37 +138,76 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     if(solved) retElem.classList.add("solved");
     retElem.classList.add("puzzle-container");
 
+    // top layer: name/author/rating and asterisk notification
     let topElem = document.createElement("div");
+    topElem.classList.add("card-top");
 
     let titleElem = document.createElement("a");
-    titleElem.classList.add("puzzle-title");
     titleElem.setAttribute("href", puzzle.link);
     titleElem.setAttribute("target", "_blank");
     titleElem.innerText = puzzle.title;
     topElem.appendChild(titleElem);
 
     let authorElem = document.createElement("span");
-    authorElem.classList.add("puzzle-author");
     authorElem.innerText = puzzle.author;
     topElem.appendChild(authorElem);
 
     let ratingElem = document.createElement("span");
     let stars = "";
-    for(let _ = 0; _ < puzzle.rating; _++)
-        stars += "*";
+    while(stars.length < puzzle.rating)
+        stars += "★";
+    while(stars.length < 5)
+        stars += "☆";
     ratingElem.innerText = stars;
     topElem.appendChild(ratingElem);
 
-    let bottomElem = document.createElement("div");
-    bottomElem.classList.add("puzzle-bottom");
-
-    let solutionElem = document.createElement("div");
+    // middle layer: left side solution hint, right side buttons
+    let middleElem = document.createElement("div");
+    middleElem.classList.add("card-mid");
     
     if(!solved) {
         let solutionHintElem = document.createElement("div");
         solutionHintElem.innerText = "Solution code: " + puzzle.solutionHint;
-        solutionElem.appendChild(solutionHintElem);
+        middleElem.appendChild(solutionHintElem);
+    }
+    else {
+        let solvedElem = document.createElement("span");
+        solvedElem.innerText = "Solved!"
+        middleElem.appendChild(solvedElem);
+    }
 
+    let buttonsElem = document.createElement("div");
+    buttonsElem.classList.add("card-buttons");
+
+    let linkButton = document.createElement("button");
+    linkButton.textContent = "Open";
+    linkButton.addEventListener("click", () => {
+        const link = document.createElement("a");
+        link.setAttribute("href", puzzle.link);
+        link.setAttribute("target", "_blank");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    buttonsElem.appendChild(linkButton);
+
+    if(AP.debugMode) {
+        let autosolve = document.createElement("button");
+        autosolve.textContent = "h";
+        autosolve.addEventListener("click", () => {
+            AP.sendLocations(originalPuzzle);
+        });
+        buttonsElem.appendChild(autosolve);
+    }
+
+    middleElem.appendChild(buttonsElem);
+
+    // bottom layer: left side solution input, right side tags
+    let bottomElem = document.createElement("div");
+    bottomElem.classList.add("card-bottom");
+    let blElem = document.createElement("div");
+    
+    if(!solved) {
         let solutionInput = document.createElement("input");
         solutionInput.addEventListener("keyup", (e) => {
             if(e.key === "Enter") {
@@ -182,7 +220,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
                 }
             }
         });
-        solutionElem.appendChild(solutionInput);
+        blElem.appendChild(solutionInput);
         
         if(AP.getAvailableRerolls() > 0) {
             let rerollElem = document.createElement("button");
@@ -192,27 +230,11 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
                 }
             }));
             rerollElem.innerText = "Reroll";
-            solutionElem.appendChild(rerollElem);
+            blElem.appendChild(rerollElem);
         }
     }
-    else {
-        let solvedElem = document.createElement("span");
-        solvedElem.innerText = "Solved!"
-        solvedElem.classList.add("solved-indicator");
-        solutionElem.appendChild(solvedElem);
-    }
 
-    // debug autosolve button
-    if(AP.debugMode) {
-        let autosolve = document.createElement("button");
-        autosolve.textContent = "h";
-        autosolve.addEventListener("click", () => {
-            AP.sendLocations(originalPuzzle);
-        });
-        solutionElem.appendChild(autosolve);
-    }
-
-    bottomElem.appendChild(solutionElem);
+    bottomElem.appendChild(blElem);
 
     let tagsElem = document.createElement("div");
     tagsElem.classList.add("tab1-tags");
@@ -242,6 +264,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     bottomElem.appendChild(tagsElem);
 
     retElem.appendChild(topElem);
+    retElem.appendChild(middleElem);
     retElem.appendChild(bottomElem);
     return retElem;
 }
