@@ -75,7 +75,17 @@ function initialize() {
     console.log("gmorning");
     initDebugHotkeys();
 
-    //initialize tab controls
+    // read localStorage for settings
+    if(localStorage.getItem("hideAddress") != censor.toString())
+        toggleCensor();
+    if(!censor) {
+        if(localStorage.getItem("savedSlotName"))
+            document.getElementById("input-username").value = localStorage.getItem("savedSlotName");
+        if(localStorage.getItem("savedAddress"))
+            document.getElementById("input-address").value = localStorage.getItem("savedAddress");
+    }
+
+    // initialize tab controls
     const TABS = document.getElementById("tab-buttons");
     for(let i = 0; i < TABS.children.length; i++) {
         TABS.children[i].addEventListener("click", () => {setTab(i)});
@@ -84,7 +94,7 @@ function initialize() {
         document.getElementById("chat-input").focus();
     });
 
-    //initialize login controls
+    // initialize login controls
     document.getElementById("controls-connect").addEventListener("click",
         () => login());
     document.getElementById("input-address").addEventListener("keyup",
@@ -366,6 +376,16 @@ function login(isReconnect) {
             PL.updatePuzzleList();
             buildDashboard();
 
+            // save localStorage
+            if(!censor) {
+                localStorage.setItem("savedAddress", address);
+                localStorage.setItem("savedSlotName", username);
+            }
+            else {
+                document.getElementById("input-address").value = "";
+                document.getElementById("input-username").value = "";
+            }
+
             client.socket.on("disconnected", attemptReconnect, 5000);
 
         })
@@ -409,7 +429,6 @@ function toggleCensor(connected, address, username) {
     censor = !censor;
     document.getElementById("controls-censor").innerText = censor ? "x" : "o";
 
-    let elem = document.getElementById("top-text");
     if(connected) {
         let subMsg = `${censor ? "" : `to ${address}`} as ${username}`;
         updateTopBar(topBarStates.connected, `Connected ${subMsg}`);
@@ -418,6 +437,12 @@ function toggleCensor(connected, address, username) {
         document.getElementById("input-address").setAttribute("type", "password");
     else
         document.getElementById("input-address").setAttribute("type", "text");
+
+    localStorage.setItem("hideAddress", censor);
+    if(censor) {
+        localStorage.removeItem("savedAddress");
+        localStorage.removeItem("savedSlotName");
+    }
 }
 
 function toggleShowPassword() {
