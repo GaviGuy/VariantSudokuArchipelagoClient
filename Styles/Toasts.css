@@ -1,0 +1,39 @@
+#toaster {
+    display: block;
+    position: fixed;
+    top: 4rem;
+    right: 4rem;
+
+    pointer-events: none;
+
+    width: 16rem;
+    height: 6rem;
+    opacity: 0;
+    transition: opacity 0.05s linear;
+}
+
+#toaster.active {
+    pointer-events: all;
+    transition: opacity 0.05s linear;
+    opacity: 100%;
+}
+
+.toast {
+    width: 100%;
+    height: 100%;
+    border: 2px solid Black;
+    border-radius: 1rem;
+    padding: 0.5rem;
+
+    background-color: #DDD;
+    transition: fadeIn 1s linear;
+}
+
+.toast.error {
+    background-color: #F66;
+}
+
+.toast>*.title {
+    text-align: center;
+    font-size: 1.125rem;
+}

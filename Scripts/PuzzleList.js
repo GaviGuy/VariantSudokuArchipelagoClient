@@ -1,5 +1,6 @@
 import * as AP from "./Archipelago.js";
 import {getSaveKey} from "./SaveLoad.js";
+import {makeToast} from "./Toasts.js";
 
 async function getJson(path) {
     return fetch(path)
@@ -9,7 +10,10 @@ async function getJson(path) {
             }
             return response.json();
         })
-        .catch(error => console.error('Failed to load puzzle list:', error));
+        .catch(error => {
+            console.error(error);
+            AP.queueNotification(3, "Fatal error", "Failed to load puzzle list. Check console for details");
+        });
 }
 
 export const PUZZLES_DATABASE = await getJson("./Assets/Puzzles.json");
@@ -34,7 +38,8 @@ export function updatePuzzleList() {
         let cheatElem = document.createElement("input");
         cheatElem.addEventListener("keyup", (e) => {
             if(e.key === "Enter") {
-                console.log("cheated location id: " + cheatElem.value);
+                if(!cheatElem.value) return;
+                AP.queueNotification(0, "Forced location", "ID: " + cheatElem.value);
                 AP.client.check(parseInt(cheatElem.value));
                 cheatElem.value = "";
             }
@@ -49,6 +54,14 @@ export function updatePuzzleList() {
             });
         });
         listElem.appendChild(debugButtonElem);
+
+        let button2 = document.createElement("button");
+        button2.innerText = "notif test";
+        button2.addEventListener("click", () => {
+            for(let i in TAGS)
+                AP.queueNotification(0, i, TAGS[i].name);
+        });
+        listElem.appendChild(button2);
 
         let buildButton = document.createElement("a");
         buildButton.setAttribute("href", "buildJson.html");
@@ -71,17 +84,17 @@ export function updatePuzzleList() {
     pillar = pillar.filter((a, b) => pillar.indexOf(a) === b);
 
     for(let i in filler) {
-        let solved = AP.save.solvedIds.includes(filler[i]);
+        const solved = AP.save.solvedIds.includes(filler[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(filler[i]), 0, solved));
     }
 
     for(let i in pillar) {
-        let solved = AP.save.solvedIds.includes(pillar[i]);
+        const solved = AP.save.solvedIds.includes(pillar[i]);
         listElem.appendChild(createPuzzleCard(getPuzzleById(pillar[i]), 1, solved));
     }
 
     if(canAccessBoss()) {
-        let solved = AP.save.solvedIds.includes(AP.slotData.bossId);
+        const solved = AP.save.solvedIds.includes(AP.slotData.bossId);
         listElem.appendChild(createPuzzleCard(getPuzzleById(AP.slotData.bossId), 2, solved));
     }
 }
@@ -110,7 +123,7 @@ export function canAccessBoss() {
 }
 
 function checkSolution(puzzle, solution) {
-    let solutionHash = AP.cyrb53(puzzle.title + solution)
+    const solutionHash = AP.cyrb53(puzzle.title + solution)
     if(puzzle.solutionHash == solutionHash)
         return true;
     return false;
@@ -118,7 +131,7 @@ function checkSolution(puzzle, solution) {
 
 function createPuzzleCard(puzzle, puzzleType, solved) {
     // handle rerolls
-    let originalPuzzle = puzzle;
+    const originalPuzzle = puzzle;
     while(true) {
         let found = false;
         for(let i in AP.save.rerolls) {
@@ -136,7 +149,6 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let retElem = document.createElement("div");
     retElem.classList.add(PUZZLE_CLASSES[puzzleType])
     if(solved) retElem.classList.add("solved");
-    retElem.classList.add("puzzle-container");
 
     // top layer: name/author/rating and asterisk notification
     let topElem = document.createElement("div");
@@ -193,7 +205,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
 
     if(AP.debugMode) {
         let autosolve = document.createElement("button");
-        autosolve.textContent = "h";
+        autosolve.textContent = "SKIP";
         autosolve.addEventListener("click", () => {
             AP.sendLocations(originalPuzzle);
         });
@@ -205,36 +217,56 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     // bottom layer: left side solution input, right side tags
     let bottomElem = document.createElement("div");
     bottomElem.classList.add("card-bottom");
-    let blElem = document.createElement("div");
+
+    let bottomLeft = document.createElement("div");
     
     if(!solved) {
         let solutionInput = document.createElement("input");
         solutionInput.addEventListener("keyup", (e) => {
             if(e.key === "Enter") {
-                let code = solutionInput.value;
+                const code = solutionInput.value;
                 if(checkSolution(puzzle, code)) {
                     AP.sendLocations(originalPuzzle);
                 }
                 else {
-                    console.warn("incorrect solution: " + code);
+                    if(code.length > 0) {
+                        const msg = `${code} is not the solution to ${puzzle.title}`
+                        AP.queueNotification(4, "Incorrect code", msg, true);
+                    }
                 }
             }
         });
-        blElem.appendChild(solutionInput);
+        bottomLeft.appendChild(solutionInput);
         
+        let submitButton = document.createElement("button");
+        submitButton.addEventListener("click", () => {
+            const code = solutionInput.value;
+            if(checkSolution(puzzle, code)) {
+                AP.sendLocations(originalPuzzle);
+            }
+            else {
+                if(code.length > 0) {
+                    const msg = `${code} is not the solution to ${puzzle.title}`
+                    AP.queueNotification(4, "Incorrect code", msg, true);
+                }
+            }
+        });
+        submitButton.textContent = "Submit";
+        bottomLeft.appendChild(submitButton);
+
         if(AP.getAvailableRerolls() > 0) {
-            let rerollElem = document.createElement("button");
-            rerollElem.addEventListener("click", (() => {
+            let rerollButton = document.createElement("button");
+            rerollButton.addEventListener("click", () => {
                 if(confirm(`Spend a Puzzle Reroll? You have ${AP.getAvailableRerolls()}.`)) {
                     AP.rerollPuzzle(puzzle);
                 }
-            }));
-            rerollElem.innerText = "Reroll";
-            blElem.appendChild(rerollElem);
+            });
+            rerollButton.innerText = "Reroll";
+            bottomLeft.appendChild(rerollButton);
         }
     }
 
-    bottomElem.appendChild(blElem);
+    bottomElem.appendChild(bottomLeft);
 
     let tagsElem = document.createElement("div");
     tagsElem.classList.add("tab1-tags");

@@ -4,18 +4,20 @@ export const client = new Client();
 export let localItems = [];
 export let slotData, address, username, connected;
 export let debugMode = false;
-export let totalPuzzleCount = 0;
 export let allPuzzleIds = [];
 export let save = {
     solvedIds: [],
     rerolls: [],
-    lastItemId: 0
+    itemIndex: 2
 };
+let toastQueue = [];
+let notifTimer;
 let censor = false;
 
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
 import * as SL from "./SaveLoad.js";
+import { makeToast } from "./Toasts.js";
 
 export function getAvailableRerolls() {
     let ret = 0;
@@ -84,7 +86,6 @@ function initDebugHotkeys() {
         if (e.ctrlKey && e.key === "1") {
             e.preventDefault();
             debugMode = !debugMode;
-            //console.log(`${debugMode ? "enabling" : "disabling"} debug mode`);
             PL.updatePuzzleList();
         }
     });
@@ -95,11 +96,10 @@ function readAllPuzzles() {
 
     allPuzzleIds = [];
     for(let i in client.room.allLocations) {
-        let locId = client.room.allLocations[i];
+        const locId = client.room.allLocations[i];
         if(locId >= 1000 && locId % 10 == 0)
             allPuzzleIds.push(locId);
     }
-    totalPuzzleCount = allPuzzleIds.length;
 }
 
 export function getPlayableIds(pillarsOnly) {
@@ -138,6 +138,7 @@ export function getNumberPillarSolved() {
 function initialize() {
     console.log("gmorning");
     initDebugHotkeys();
+    window.scrollTo(0, 0);
 
     // read localStorage for settings
     if(localStorage.getItem("hideAddress") != censor.toString())
@@ -202,7 +203,6 @@ function initialize() {
         () => handleTopArrow());
 
     // why is this necessary :(
-    setTopMenuState(menuStates.open);
     setTopMenuState(menuStates.fixed);
     updateConnectButton();
 }
@@ -269,7 +269,7 @@ export function checkBonus() {
         // give enough per solve that they run out before solving all filler
         case 0:
             nBonus = slotData.bossUnlockCount;
-            while(totalPuzzleCount * mult < nBonus)
+            while(allPuzzleIds.length * mult < nBonus)
                 mult++;
             for(let i = 0; i < solves * mult; i++) {
                 client.check(200 + i)
@@ -279,7 +279,7 @@ export function checkBonus() {
         // # of bonuses equal to 50% of the filler puzzle count
         // give 2 per solve until they run out
         case 1:
-            nBonus = Math.ceil((totalPuzzleCount - 1) / 2);
+            nBonus = Math.ceil((allPuzzleIds.length - 1) / 2);
             for(let i = 0; i < solves * mult; i++) {
                 client.check(200 + i)
             }
@@ -360,23 +360,37 @@ client.messages.on("message", (content) => {
 // client.messages.on("itemSent", (content) => {
 // });
 
-// client.room.on("locationsChecked", () => {
-// });
+client.items.on("itemsReceived", () => {
+    processNewItems();
+});
 
-client.items.on("itemsReceived", (h) => {
+function processNewItems() {
     if(!connected) return
-    console.warn("got a new item: " + h);
-    for(let i = localItems.length; i < client.items.received.length; i++) {
+
+    for(let i = save.itemIndex; i < client.items.received.length; i++) {
         let item = client.items.received[i];
         localItems.push({
             id: item.id,
             name: item.name,
         });
+
+        if(client.items.received[i].sender.slot == client.players.self.slot) {
+            const msg = `You found your ${item.name}`;
+            queueNotification(0, "Item found", msg);
+        }
+        if(client.items.received[i].sender.slot != client.players.self.slot) {
+            const msg = `${client.items.received[i].sender.name} sent you ${item.name}`;
+            queueNotification(0, "Item received", msg);
+        }
     }
+
+    //todo: don't rebuild ui for filler (?)
+    save.itemIndex = client.items.received.length;
     buildDashboard();
     PL.updatePuzzleList();
     SL.saveGame();
-});
+
+}
 
 client.items.on("hintsInitialized", (h) => {
     buildDashboard();
@@ -442,13 +456,12 @@ function login(isReconnect) {
             updateTopBar(topBarStates.connected, `Connected ${subMsg}`);
 
             // load data
-            readLocalItems();
-            readAllPuzzles();
-            SL.loadGame();
-
-            // update tabs
-            PL.updatePuzzleList();
-            buildDashboard();
+            SL.loadGame().then(() => {
+                // toast new items
+                readLocalItems();
+                readAllPuzzles();
+                processNewItems();
+            });
 
             // save localStorage
             if(!censor) {
@@ -532,6 +545,45 @@ function toggleShowPassword() {
     }
 }
 
+export function queueNotification(type, title, message, rush) {
+    if(!message && message != 0) message = "";
+    const notif = {
+        type: type,
+        title: title,
+        message: message
+    }
+
+    if(rush) toastQueue.unshift(notif);
+    else toastQueue.push(notif);
+
+    if(!notifTimer) {
+        triggerNotifications();
+        notifTimer = setInterval(triggerNotifications, 3000);
+    }
+}
+
+export function queueNotifications(notifs, rush) {
+    if(!notifs) return;
+    if(rush) toastQueue.unshift(...notifs)
+    else toastQueue.push(...notifs)
+
+    if(!notifTimer) {
+        triggerNotifications();
+        notifTimer = setInterval(triggerNotifications, 3000);
+    }
+}
+
+function triggerNotifications() {
+    if(toastQueue.length == 0) {
+        clearInterval(notifTimer);
+        notifTimer = undefined;
+        return;
+    }
+
+    const notif = toastQueue.shift();
+    makeToast(notif.type, notif.title, notif.message);
+}
+
 // string hashing function taken from
 // https://github.com/bryc/code/blob/master/jshash/experimental/cyrb53.js
 export const cyrb53 = (str, seed = 0) => {
@@ -553,5 +605,5 @@ function resetSave() {
     localItems = [];
     save.solvedIds = [];
     save.rerolls = [];
-    save.lastItemId = 0;
+    save.itemIndex = 2;
 }

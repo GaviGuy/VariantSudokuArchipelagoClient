@@ -6,23 +6,23 @@
 
 .filler {
     --color-card: #9BF;
-    color: #052;
-    border-color: #052;
+    /* color: #052; */
+    /* border-color: #052; */
 }
 
 .pillar {
     --color-card: #FC9;
-    color: #025;
-    border-color: #025;
+    /* color: #025; */
+    /* border-color: #025; */
 }
 
 .boss {
     --color-card: #F99;
-    color: #400;
-    border-color: #400;
+    /* color: #400; */
+    /* border-color: #400; */
 }
 
-.puzzle-container {
+#tab1-list>div {
     border: 2px solid #000;
     border-radius: 4px;
     margin-top: 0.5em;
@@ -51,7 +51,7 @@
 }
 
 .card-top>*:nth-child(3) {
-    font-weight: bold;
+    font-size: 1.125rem;
 }
 
 .card-top>*:nth-child(3)::before {
@@ -68,6 +68,10 @@
     flex-direction: row;
     margin: 0.5rem;
     justify-content: space-between;
+}
+
+.card-mid>*:nth-child(2) {
+    flex-shrink: 0;
 }
 
 .card-bottom {
