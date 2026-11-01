@@ -13,6 +13,7 @@ export let save = {
 let toastQueue = [];
 let notifTimer;
 let censor = false;
+export const TOAST_LENGTH = 3500;
 
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
@@ -339,13 +340,14 @@ export function hintRandomPuzzle(pillarsOnly) {
         let printStr = `You can't afford the hint. `
                 + `You have ${client.room.hintPoints} point${client.room.hintPoints == 1 ? "" : "s"} `
                 + `and need at least ${client.room.hintCost}.`
-        printChatMessage(printStr);
+        queueNotification(0, "Can't Afford Hint", printStr, true);
         return;
     }
 
     let validItems = getUnreceivedPuzzles(pillarsOnly, true);
     if(validItems.length == 0) {
-        printChatMessage("There are no more puzzles to hint");
+        const str = pillarsOnly ? "pillars" : "puzzles";
+        queueNotification(0, "", `There are no more ${str} left to hint`, true);
         return;
     }
 
@@ -362,6 +364,17 @@ client.messages.on("message", (content) => {
 
 client.items.on("itemsReceived", () => {
     processNewItems();
+});
+
+client.items.on("hintReceived", () => {
+    const hint = client.items.hints[client.items.hints.length-1].item;
+    const self = client.players.self;
+    let str = hint.receiver.slot == self.slot ? "Your " : `${hint.receiver.name}'s `;
+    str += hint.name;
+    str += " is at "
+    str += hint.receiver.slot == self.slot ? "your " : `${hint.sender.name}'s `;
+    str += hint.locationName;
+    queueNotification(0, "Hint Received", str);
 });
 
 function processNewItems() {
@@ -545,7 +558,7 @@ function toggleShowPassword() {
     }
 }
 
-export function queueNotification(type, title, message, rush) {
+export function queueNotification(type, title, message, force) {
     if(!message && message != 0) message = "";
     const notif = {
         type: type,
@@ -553,23 +566,38 @@ export function queueNotification(type, title, message, rush) {
         message: message
     }
 
-    if(rush) toastQueue.unshift(notif);
+    if(force) toastQueue.unshift(notif);
     else toastQueue.push(notif);
+
+    if(force && notifTimer) {
+        triggerNotifications();
+        clearInterval(notifTimer);
+        notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
+    }
 
     if(!notifTimer) {
         triggerNotifications();
-        notifTimer = setInterval(triggerNotifications, 3000);
+        notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
     }
 }
 
-export function queueNotifications(notifs, rush) {
+export function queueNotifications(notifs, force) {
     if(!notifs) return;
-    if(rush) toastQueue.unshift(...notifs)
+    if(rush) {
+        notifs.push(...toastQueue);
+        toastQueue = notifs;
+    }
     else toastQueue.push(...notifs)
+
+    if(force && notifTimer) {
+        triggerNotifications();
+        clearInterval(notifTimer);
+        notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
+    }
 
     if(!notifTimer) {
         triggerNotifications();
-        notifTimer = setInterval(triggerNotifications, 3000);
+        notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
     }
 }
 
@@ -582,6 +610,12 @@ function triggerNotifications() {
 
     const notif = toastQueue.shift();
     makeToast(notif.type, notif.title, notif.message);
+}
+
+export function skipNotification() {
+    triggerNotifications();
+    clearInterval(notifTimer);
+    notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
 }
 
 // string hashing function taken from

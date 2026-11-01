@@ -1,5 +1,6 @@
 import * as AP from "./Archipelago.js";
 
+let toastTimeout;
 
 function fadeToast() {
     document.getElementById("toaster").classList.remove("active");
@@ -48,6 +49,12 @@ export function makeToast(type, title, message) {
     toaster.innerHTML = "";
     toaster.appendChild(toastElem);
     toaster.classList.add("active");
+
+    toastElem.addEventListener("click", () => {
+        fadeToast();
+        AP.skipNotification();
+    });
     
-    setTimeout(fadeToast, 2500);
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(fadeToast, AP.TOAST_LENGTH - 350);
 }

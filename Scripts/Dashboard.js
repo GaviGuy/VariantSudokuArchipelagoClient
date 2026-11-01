@@ -1,5 +1,5 @@
 import * as AP from "./Archipelago.js";
-import {canAccessBoss} from "./PuzzleList.js";
+import { canAccessBoss } from "./PuzzleList.js";
 
 export function buildDashboard() {
     let dashElem = document.getElementById("tab0-content");
@@ -118,9 +118,6 @@ export function buildDashboard() {
             AP.hintRandomPuzzle();
             buildDashboard();
         });
-        if(AP.getUnreceivedPuzzles(false, true).length == 0) {
-            fillerButton.setAttribute("disabled", true);
-        }
         hintElem.appendChild(fillerButton);
 
         // button to hint a random pillar puzzle (if possible)
@@ -131,9 +128,6 @@ export function buildDashboard() {
                 AP.hintRandomPuzzle(true);
                 buildDashboard();
             });
-            if(AP.getUnreceivedPuzzles(true, true).length == 0) {
-                pillarButton.setAttribute("disabled", true);
-            }
             hintElem.appendChild(pillarButton);
         }
         dashElem.appendChild(hintElem);
