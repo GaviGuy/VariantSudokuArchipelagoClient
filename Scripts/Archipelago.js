@@ -614,8 +614,10 @@ function triggerNotifications() {
 
 export function skipNotification() {
     triggerNotifications();
-    clearInterval(notifTimer);
-    notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
+    if(notifTimer) {
+        clearInterval(notifTimer);
+        notifTimer = setInterval(triggerNotifications, TOAST_LENGTH);
+    }
 }
 
 // string hashing function taken from
