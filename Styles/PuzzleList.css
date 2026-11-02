@@ -103,3 +103,7 @@
     margin-right: 0.25em;
     height: 2em;
 }
+
+.tab1-tags>*>img {
+    height: 2em;
+}

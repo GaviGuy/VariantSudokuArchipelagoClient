@@ -1,0 +1,40 @@
+/* Tooltip taken from w3 guide at https://www.w3schools.com/howto/howto_css_tooltip.asp */
+
+.tt {
+  position: relative;
+  display: inline-block;
+}
+
+.tt .tt-content {
+  visibility: hidden;
+  width: 320px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+
+  position: absolute;
+  bottom: 125%;
+  left: calc(50% - 160px - 5px);
+  margin-left: 0;
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tt .tt-content::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tt:hover .tt-content {
+  visibility: visible;
+  opacity: 1;
+}

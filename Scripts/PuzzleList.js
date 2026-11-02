@@ -191,6 +191,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let buttonsElem = document.createElement("div");
     buttonsElem.classList.add("card-buttons");
 
+    // debug auto-solve button
     if(AP.debugMode) {
         let autosolve = document.createElement("button");
         autosolve.textContent = "SKIP";
@@ -200,17 +201,16 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         buttonsElem.appendChild(autosolve);
     }
 
+    // repeat instance free reroll button
     // this is non-deterministic though, hmmm
+    // todo: disable this function in a race environment (?) or via yaml
     if(!solved && getSolveIsInStorage(puzzle.id)) {
         let reroll = document.createElement("button");
         reroll.textContent = "Reroll*";
         reroll.addEventListener("click", () => {
-            console.log(AP.getAvailableRerolls());
             if(confirm(`It seems you've solved this puzzle already. You may reroll it free of cost.`)) {
                 AP.rerollPuzzleFree(puzzle);
             }
-            console.log(AP.getAvailableRerolls());
-            console.warn(AP.save.rerolls);
         });
         buttonsElem.appendChild(reroll);
     }
@@ -294,21 +294,43 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         }
     };
     for(let i = 0; i < puzzle.tags.length; i++) {
-        let elem = document.createElement("img");
+        let tabBox = document.createElement("div");
+        let img = document.createElement("img");
+        let tt = document.createElement("span");
+
+        img.style.pointerEvents = "none";
+        tabBox.classList.add("tt");
+        tt.classList.add("tt-content");
+        
         let tag = lookupTag(puzzle.tags[i]);
+
         if(!tag) {
-            elem.setAttribute("title", `Unknown tag: ${puzzle.tags[i]}`);
-            elem.setAttribute("src", "Assets/Tags/unknown.png");
+            img.setAttribute("src", "Assets/Tags/unknown.png");
+            tt.innerText = `Unknown tag: ${puzzle.tags[i]}`
         }
         else {
-            // elem.innerText = tag.name;
-            elem.setAttribute("title", tag.name + "\n" + tag.desc);
             if(tag.img)
-                elem.setAttribute("src", `Assets/Tags/${tag.img}`)
+                img.setAttribute("src", `Assets/Tags/${tag.img}`)
             else
-                elem.setAttribute("src", "Assets/Tags/unknown.png");
+                img.setAttribute("src", "Assets/Tags/unknown.png");
+            tt.innerHTML = "<b>" + tag.name + "</b><br>" + tag.desc+ "<br>";
+            if(tag.largeImg) {
+                let ttImg = document.createElement("img");
+                ttImg.setAttribute("src", `Assets/Tags/${tag.largeImg}`);
+                tt.appendChild(ttImg);
+            }
+            else {
+                let ttImg = document.createElement("img");
+                ttImg.setAttribute("src", "Assets/Tags/large-unknown.png");
+                tt.appendChild(ttImg);
+            }
+
         }
-        tagsElem.appendChild(elem);
+
+        tabBox.appendChild(img);
+        tabBox.appendChild(tt);
+
+        tagsElem.appendChild(tabBox);
     }
     bottomElem.appendChild(tagsElem);
 
