@@ -191,6 +191,30 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     let buttonsElem = document.createElement("div");
     buttonsElem.classList.add("card-buttons");
 
+    if(AP.debugMode) {
+        let autosolve = document.createElement("button");
+        autosolve.textContent = "SKIP";
+        autosolve.addEventListener("click", () => {
+            AP.sendLocations(originalPuzzle);
+        });
+        buttonsElem.appendChild(autosolve);
+    }
+
+    // this is non-deterministic though, hmmm
+    if(!solved && getSolveIsInStorage(puzzle.id)) {
+        let reroll = document.createElement("button");
+        reroll.textContent = "Reroll*";
+        reroll.addEventListener("click", () => {
+            console.log(AP.getAvailableRerolls());
+            if(confirm(`It seems you've solved this puzzle already. You may reroll it free of cost.`)) {
+                AP.rerollPuzzleFree(puzzle);
+            }
+            console.log(AP.getAvailableRerolls());
+            console.warn(AP.save.rerolls);
+        });
+        buttonsElem.appendChild(reroll);
+    }
+
     let linkButton = document.createElement("button");
     linkButton.textContent = "Open";
     linkButton.addEventListener("click", () => {
@@ -202,15 +226,6 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         document.body.removeChild(link);
     });
     buttonsElem.appendChild(linkButton);
-
-    if(AP.debugMode) {
-        let autosolve = document.createElement("button");
-        autosolve.textContent = "SKIP";
-        autosolve.addEventListener("click", () => {
-            AP.sendLocations(originalPuzzle);
-        });
-        buttonsElem.appendChild(autosolve);
-    }
 
     middleElem.appendChild(buttonsElem);
 
@@ -227,6 +242,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
                 const code = solutionInput.value;
                 if(checkSolution(puzzle, code)) {
                     AP.sendLocations(originalPuzzle);
+                    saveSolveToStorage(puzzle.id);
                 }
                 else {
                     if(code.length > 0) {
@@ -243,6 +259,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
             const code = solutionInput.value;
             if(checkSolution(puzzle, code)) {
                 AP.sendLocations(originalPuzzle);
+                saveSolveToStorage(puzzle.id);
             }
             else {
                 if(code.length > 0) {
@@ -299,4 +316,20 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     retElem.appendChild(middleElem);
     retElem.appendChild(bottomElem);
     return retElem;
+}
+
+function saveSolveToStorage(id) {
+    let saved = JSON.parse(localStorage.getItem("solvedIds"));
+    if(!saved) saved = [];
+    if(!(saved.includes(id)))
+        saved.push(id);
+    localStorage.setItem("solvedIds", JSON.stringify(saved));
+    console.log(saved);
+}
+
+function getSolveIsInStorage(id) {
+    let saved = localStorage.getItem("solvedIds");
+    if(!saved) return false
+    if(saved.includes(id)) return true
+    return false;
 }

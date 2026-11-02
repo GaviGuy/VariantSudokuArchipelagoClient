@@ -8,12 +8,14 @@ export let allPuzzleIds = [];
 export let save = {
     solvedIds: [],
     rerolls: [],
-    itemIndex: 2
+    itemIndex: 2,
+    freerolls: 0
 };
 let toastQueue = [];
 let notifTimer;
 let censor = false;
 export const TOAST_LENGTH = 3500;
+export let freerolls = 0;
 
 import buildDashboard from "./Dashboard.js";
 import * as PL from "./PuzzleList.js";
@@ -27,7 +29,7 @@ export function getAvailableRerolls() {
             ret++;
         }
     }
-    return ret - save.rerolls.length;
+    return ret + save.freerolls - save.rerolls.length;
 }
 
 export function updateInterface() {
@@ -71,8 +73,9 @@ export function rerollPuzzle(puzzle) {
     if(getAvailableRerolls() < 1) return;
     const newPuzzle = getValidRerollTarget(puzzle, puzzle.rating-1, puzzle.rating);
     if(!newPuzzle) {
+        queueNotification(0, "", "No valid puzzles to reroll to", true);
         printChatMessage("No valid puzzles to reroll to");
-        return;
+        return false;
     }
     save.rerolls.push({
         source: puzzle.id,
@@ -80,6 +83,26 @@ export function rerollPuzzle(puzzle) {
     });
     PL.updatePuzzleList();
     SL.saveGame();
+    return newPuzzle;
+}
+
+export function rerollPuzzleFree(puzzle) {
+    const newPuzzle = getValidRerollTarget(puzzle, puzzle.rating, puzzle.rating);
+    if(!newPuzzle) {
+        queueNotification(0, "", "No valid puzzles to reroll to", true);
+        printChatMessage("No valid puzzles to reroll to");
+        return false;
+    }
+    save.rerolls.push({
+        source: puzzle.id,
+        dest: newPuzzle.id
+    });
+    save.freerolls++;
+    PL.updatePuzzleList();
+    SL.saveGame();
+    return newPuzzle;
+
+
 }
 
 function initDebugHotkeys() {

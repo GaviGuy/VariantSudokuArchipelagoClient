@@ -15,6 +15,8 @@ export function saveGame() {
         saveObject.rerolls = AP.save.rerolls;
     if(AP.save.itemIndex > 2)
         saveObject.lastItemId = AP.save.itemIndex;
+    if(AP.save.freerolls > 0)
+        saveObject.freerolls = AP.save.freerolls;
 
     AP.client.storage.prepare(getSaveKey(), {}).update(saveObject).commit(false);
 }
@@ -25,6 +27,7 @@ export async function loadGame() {
     if(data.solvedIds) AP.save.solvedIds = data.solvedIds;
     if(data.rerolls) AP.save.rerolls = data.rerolls;
     if(data.lastItemId) AP.save.itemIndex = data.lastItemId;
+    if(data.freerolls) AP.save.freerolls = data.freerolls;
 
     AP.updateInterface();
 }
