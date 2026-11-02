@@ -5,8 +5,9 @@
 }
 
 #tab-contents {
-    border: 2px solid #000;
+    border: 1px solid var(--color-main);
     border-radius: 4px;
+    background-color: color-mix(in srgb, var(--color-main) 8%, var(--color-bg));
     padding: 2rem;
     width: min(calc(100% - 4em), 44em);
     min-height: calc(100vh - 20em);
@@ -24,6 +25,7 @@
 
 #tab-buttons>button.active {
     background-color: #F99;
+    border-width: 2px;
 }
 
 #tab-contents>div {

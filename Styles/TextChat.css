@@ -8,17 +8,28 @@
     max-width: calc(100vw - 2rem);
     min-height: 8rem;
     height: calc(100vh - 24em);
-    overflow-y: scroll;
+    overflow-y: auto;
     border-bottom: 2px solid #555;
 }
 
 #chat-log>* {
     text-wrap: wrap;
     overflow-wrap: break-word;
-    border-top: 1px solid #555;
+    border-bottom: 1px solid #555;
+    border-right: 1px solid #555;
     overflow-x: clip;
+    padding-left: 4px;
+    padding-right: 4px;
     padding-top: 1px;
     padding-bottom: 3px;
+}
+
+#chat-log>*:nth-child(2n) {
+    background-color: #E0DDDD;
+}
+
+#chat-log>*:nth-child(2n+1) {
+    background-color: #F0EEEE;
 }
 
 #chat-input {

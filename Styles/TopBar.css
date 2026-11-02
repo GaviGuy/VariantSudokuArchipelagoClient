@@ -9,13 +9,13 @@
     padding: 0px;
     text-align: center;
     vertical-align: middle;
-    background-color: #DDD;
     position: sticky;
     top: 0px;
     height: 2.5rem;
     z-index: 5000;
 
     background-color: var(--color-connection);
+    border-bottom: 1px solid var(--color-main);
 }
 
 #connection-info>* {

@@ -22,11 +22,11 @@
 
 .toast {
     width: 100%;
-    border: 2px solid Black;
+    border: 2px solid var(--color-main);
     border-radius: 1rem;
     padding: 0.5rem;
 
-    background-color: #DDD;
+    background-color: color-mix(in srgb, var(--color-main) 8%, var(--color-bg));
     transition: fadeIn 1s linear;
 }
 

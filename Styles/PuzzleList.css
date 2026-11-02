@@ -23,7 +23,7 @@
 }
 
 #tab1-list>div {
-    border: 2px solid #000;
+    border: 2px solid var(--color-main);
     border-radius: 4px;
     margin-top: 0.5em;
     background-color: var(--color-card);
@@ -32,8 +32,8 @@
 
 .card-top {
     padding-top: 0.5rem;
-    border-bottom: 2px solid color-mix(in srgb, currentColor, #000);
-    background-color: color-mix(in srgb, var(--color-card) 90%, Black);
+    border-bottom: 2px solid color-mix(in srgb, currentColor, var(--color-main));
+    background-color: color-mix(in srgb, var(--color-card) 90%, var(--color-main));
 }
 
 .card-top>*:first-child {
@@ -98,7 +98,7 @@
 }
 
 .tab1-tags>* {
-    border: 3px solid #000;
+    border: 3px solid var(--color-main);
     border-radius: 6px;
     margin-right: 0.25em;
     height: 2em;

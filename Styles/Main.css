@@ -1,26 +1,11 @@
 body {
     --color-bg: #FFFFFF;
-    --color-main: #220;
+    --color-main: #110;
     --color-connection: #DDD;
+    color: var(--color-main);
+    background-color: var(--color-bg);
     margin: 0;
 }
-
-/* #connection-info {
-    --bg: #BA0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    background-color: var(--bg);
-}
-
-#connection-info>div {
-    padding: 2rem;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
-    width: min(calc(100% - 4rem), 44rem);
-} */
 
 #bottom-bar {
     display: flex;
