@@ -18,48 +18,56 @@
             "name": "Black Kropki",
             "sheet": "Black Kropki",
             "desc": "Digits seperated by a black kropki dot must differ in a 1:2 ratio",
-            "img": "kropkiBlack3.png"
+            "img": "kropkiBlack.png",
+            "largeImg": "large-kropkiBlack.png"
         },
         {
             "id": "kropkiWhite",
             "name": "White Kropki",
             "sheet": "White Kropki",
             "desc": "Digits seperated by a white kropki dot must differ by 1",
-            "img": "kropkiWhite3.png"
+            "img": "kropkiWhite.png",
+            "largeImg": "large-kropkiWhite.png"
         },
         {
             "id": "fiveTen",
             "name": "V or X Sums",
             "sheet": "V or X Sums",
             "desc": "Digits seperated by a V or X must sum to 5 or 10, respectively",
-            "img": "fiveTen.png"
+            "img": "fiveTen.png",
+            "largeImg": "large-fiveTen.png"
         },
         {
             "id": "quads",
             "name": "Quadruples",
             "sheet": "Quadruples",
-            "desc": "Numbers inside a dot centered on 4 cells indicate which digits must appear at least once in those 4 cells",
-            "img": "fiveTen.png"
+            "desc": "Numbers inside a dot between 4 cells indicate digits that must appear in at least one of those 4 cells",
+            "img": "quad.png",
+            "largeImg": "large-quad.png"
         },
         {
             "id": "circles",
             "name": "Counting Circles",
             "sheet": "Counting Circles",
             "desc": "A digit inside a circle indicates how many times that digit appears in a circle",
-            "img": "fiveTen.png"
+            "img": "circles.png",
+            "largeImg": "large-circles.png"
         },
         {
             "id": "killerCage",
             "name": "Killer Cages",
             "sheet": "Killer Cages",
             "desc": "Digits inside a cage can't repeat and must sum to the value written on the cage",
-            "img": "killerCage.png"
+            "img": "killerCage.png",
+            "largeImg": "large-killerCage.png"
         },
         {
             "id": "littleKiller",
             "name": "Little Killers",
             "sheet": "Little Killers",
-            "desc": "Arrowed numbers outside the grid denote the sum of all cells along their pointed lines"
+            "desc": "Arrowed numbers outside the grid denote the sum of all cells along the diagonal lines they point to",
+            "img": "littleKiller.png",
+            "largeImg": "large-littleKiller.png"
         },
         {
             "id": "fastThermo",
@@ -77,7 +85,9 @@
             "id": "arrow",
             "name": "Arrow",
             "sheet": "Arrow",
-            "desc": "The digits on an arrow sum to the value in the attached circle"
+            "desc": "The digits on an arrow sum to the value in the attached circle",
+            "img": "arrow.png",
+            "largeImg": "large-arrow.png"
         },
         {
             "id": "doubleArrow",
@@ -89,62 +99,78 @@
             "id": "renban",
             "name": "Renban Line",
             "sheet": "Renban Line",
-            "desc": "Digits on a pink renban line can't repeat and must form a continuous, consecutive set",
-            "img": "renban2.png"
+            "desc": "Digits on a renban line must form a consecutive, non-repeating set in any order",
+            "img": "renban.png",
+            "largeImg": "large-renban.png"
         },
         {
             "id": "germanWhisper",
             "name": "German Whisper Line",
             "sheet": "German Whisper Line",
-            "desc": "Adjacent digits on a green whisper line must differ by 5 or more"
+            "desc": "Adjacent digits on a German whisper line must differ by at least 5",
+            "img": "germanWhisper.png",
+            "largeImg": "large-germanWhisper.png"
         },
         {
             "id": "otherWhisper",
             "name": "Whisper Line",
             "sheet": "Other Whisper Line",
-            "desc": "Adjacent digits on a whisper line must differ by a given amount"
+            "desc": "Adjacent digits on a whisper line must differ by at least a given amount",
+            "img": "whisper.png",
+            "largeImg": "large-whisper.png"
         },
         {
             "id": "regionSum",
             "name": "Region Sum Line",
             "sheet": "Region Sum Line",
-            "desc": "Region borders divide a region sum line into segments. Each segment's digits must sum to the same value"
+            "desc": "Region borders divide a region sum line into segments. Each segment's digits must sum to the same value",
+            "img": "regionSum.png",
+            "largeImg": "large-regionSum.png"
         },
         {
             "id": "parity",
             "name": "Parity Line",
             "sheet": "Parity Line",
-            "desc": "Adjacent digits on a parity line must be odd and even"
+            "desc": "Adjacent digits on a parity line must be odd and even",
+            "img": "parity.png",
+            "largeImg": "large-parity.png"
         },
         {
             "id": "entropic",
             "name": "Entropic Line",
             "sheet": "Entropic Line",
-            "desc": "Any set of 3 adjacent cells on an entropic line must contain a low (1-3), medium (4-6), and high (7-9) digit"
+            "desc": "Any set of 3 adjacent cells on an entropic line must contain a low (123), medium (456), and high (789) digit",
+            "img": "entropic.png",
+            "largeImg": "large-entropic.png"
         },
         {
             "id": "modular",
             "name": "Modular Line",
             "sheet": "Modular Line",
-            "desc": "Any set of 3 adjacent cells on a modular line must have a unique remainder when divided by 3"
+            "desc": "Any set of 3 adjacent cells on a modular line must have a unique remainder when divided by 3",
+            "img": "modular.png",
+            "largeImg": "large-modular.png"
         },
         {
             "id": "palindrome",
             "name": "Palindrome Line",
             "sheet": "Palindrome Line",
-            "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards"
+            "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards",
+            "img": "palindrome.png",
+            "largeImg": "large-palindrome.png"
         },
         {
             "id": "diagonal",
             "name": "Diagonals",
             "sheet": "Diagonals",
-            "desc": "A diagonal line going from corner to corner must have one of every digit"
+            "desc": "A diagonal line going from corner to corner must contain one of every digit"
         },
         {
             "id": "otherLine",
             "name": "Other Line",
             "sheet": "Some other kind of line",
-            "desc": "There's a line that places some kind of restriction on some digits"
+            "desc": "There's a line that places some kind of restriction on some digits",
+            "img": "otherLine.png"
         },
         {
             "id": "irregular",
@@ -240,7 +266,7 @@
             "id": "misc",
             "name": "Unique",
             "sheet": "Some other unique rule (only select if said rule is major and not similar to any existing tag)",
-            "desc": "The main component of this puzzle can't be explained with existing tags"
+            "desc": "A major component of this puzzle can't be explained with existing tags"
         }
     ]
 }
