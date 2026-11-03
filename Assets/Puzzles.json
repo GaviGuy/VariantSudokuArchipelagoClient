@@ -266,8 +266,6 @@
                 "palindrome",
                 "diagonal",
                 "otherLine",
-                "irregular",
-                "chaosConstruct",
                 "skyscraper",
                 "sandwich",
                 "xSum",
@@ -279,6 +277,8 @@
                 "antiknight",
                 "antiking",
                 "adjacency",
+                "irregular",
+                "chaosConstruct",
                 "path",
                 "shade",
                 "misc"

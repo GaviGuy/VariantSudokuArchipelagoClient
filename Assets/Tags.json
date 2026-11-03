@@ -5,13 +5,17 @@
             "id": "vanilla",
             "name": "Vanilla",
             "sheet": "Vanilla (no variant rules)",
-            "desc": "Ordinary sudoku. No other rules apply"
+            "desc": "Ordinary sudoku. No other rules apply",
+            "img": "vanilla.png",
+            "largeImg": "large-vanilla.png"
         },
         {
             "id": "notSudoku",
-            "name": "Something Else",
+            "name": "Not Sudoku",
             "sheet": "Not Sudoku",
-            "desc": "This puzzle isn't sudoku, and doesn't abide by normal sudoku rules"
+            "desc": "This puzzle isn't sudoku, and doesn't abide by normal sudoku rules",
+            "img": "notSudoku.png",
+            "largeImg": "large-notSudoku.png"
         },
         {
             "id": "kropkiBlack",
@@ -171,7 +175,7 @@
             "sheet": "Diagonals",
             "desc": "A diagonal line going from corner to corner must contain one of every digit",
             "img": "diagonal.png",
-            "largeImg": ""
+            "largeImg": "large-diagonal.png"
         },
         {
             "id": "otherLine",
@@ -179,21 +183,7 @@
             "sheet": "Some other kind of line",
             "desc": "There's a line that places some kind of restriction on some digits",
             "img": "otherLine.png",
-            "largeImg": ""
-        },
-        {
-            "id": "irregular",
-            "name": "Irregular Sudoku",
-            "sheet": "Irregular Sudoku",
-            "desc": "Regions boundaries are irregularly shaped",
-            "img": "irregular.png",
-            "largeImg": "large-irregular.png"
-        },
-        {
-            "id": "chaosConstruct",
-            "name": "Chaos Construction",
-            "sheet": "Chaos Construction",
-            "desc": "Region boundaries are irregularly shaped and must be deduced by the solver"
+            "largeImg": "large-otherLine.png"
         },
         {
             "id": "skyscraper",
@@ -263,13 +253,17 @@
             "id": "antiknight",
             "name": "Anti-Knight",
             "sheet": "Anti-Knight",
-            "desc": "A digit can't be within a chess knight's move of itself"
+            "desc": "A digit can't be within a chess knight's move of itself",
+            "img": "antiknight.png",
+            "largeImg": "large-antiknight.png"
         },
         {
             "id": "antiking",
             "name": "Anti-King",
             "sheet": "Anti-King",
-            "desc": "A digit can't be within a chess king's move of itself"
+            "desc": "A digit can't be within a chess king's move of itself",
+            "img": "antiking.png",
+            "largeImg": "large-antiking.png"
         },
         {
             "id": "adjacency",
@@ -278,6 +272,22 @@
             "desc": "There is some kind of limitation on what digits can go in any two adjacent cells",
             "img": "adjacency.png",
             "largeImg": "large-adjacency.png"
+        },
+        {
+            "id": "irregular",
+            "name": "Irregular Sudoku",
+            "sheet": "Irregular Sudoku",
+            "desc": "Regions boundaries are irregularly shaped",
+            "img": "irregular.png",
+            "largeImg": "large-irregular.png"
+        },
+        {
+            "id": "chaosConstruct",
+            "name": "Chaos Construction",
+            "sheet": "Chaos Construction",
+            "desc": "Region boundaries are irregularly shaped and must be deduced by the solver",
+            "img": "chaosConstruct.png",
+            "largeImg": "large-chaosConstruct.png"
         },
         {
             "id": "path",
@@ -299,7 +309,9 @@
             "id": "misc",
             "name": "Unique",
             "sheet": "Some other unique rule (only select if said rule is major and not similar to any existing tag)",
-            "desc": "A major component of this puzzle can't be explained with existing tags"
+            "desc": "A major component of this puzzle can't be explained with existing tags",
+            "img": "unique.png",
+            "largeImg": "large-unique.png"
         }
     ]
 }
