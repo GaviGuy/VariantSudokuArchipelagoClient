@@ -65,7 +65,7 @@
             "id": "littleKiller",
             "name": "Little Killers",
             "sheet": "Little Killers",
-            "desc": "Arrowed numbers outside the grid denote the sum of all cells along the diagonal lines they point to",
+            "desc": "Arrowed numbers outside the grid denote the sum of all cells along the diagonal line they point to",
             "img": "littleKiller.png",
             "largeImg": "large-littleKiller.png"
         },
@@ -73,13 +73,17 @@
             "id": "fastThermo",
             "name": "Thermometer",
             "sheet": "Thermometer",
-            "desc": "Digits on a thermometer must strictly increase from bulb to tip"
+            "desc": "Digits on a thermometer must strictly increase from bulb to tip",
+            "img": "fastThermo.png",
+            "largeImg": "large-fastThermo.png"
         },
         {
             "id": "slowThermo",
             "name": "Slow Thermometer",
             "sheet": "Slow Thermometer",
-            "desc": "Digits on a thermometer must not decrease from bulb to tip"
+            "desc": "Digits on a thermometer must not decrease from bulb to tip",
+            "img": "slowThermo.png",
+            "largeImg": "large-slowThermo.png"
         },
         {
             "id": "arrow",
@@ -93,7 +97,9 @@
             "id": "doubleArrow",
             "name": "Double Arrow",
             "sheet": "Double Arrow",
-            "desc": "The digits on two connected circles and the digits on the line between them sum to the same value"
+            "desc": "The digits on two connected circles and the digits on the line between them sum to the same value",
+            "img": "doubleArrow.png",
+            "largeImg": "large-doubleArrow.png"
         },
         {
             "id": "renban",
@@ -155,7 +161,7 @@
             "id": "palindrome",
             "name": "Palindrome Line",
             "sheet": "Palindrome Line",
-            "desc": "The digits in each cell along a palindrome line must read the same forwards and backwards",
+            "desc": "The digits on a palindrome line must read the same forwards and backwards",
             "img": "palindrome.png",
             "largeImg": "large-palindrome.png"
         },
@@ -163,20 +169,25 @@
             "id": "diagonal",
             "name": "Diagonals",
             "sheet": "Diagonals",
-            "desc": "A diagonal line going from corner to corner must contain one of every digit"
+            "desc": "A diagonal line going from corner to corner must contain one of every digit",
+            "img": "diagonal.png",
+            "largeImg": ""
         },
         {
             "id": "otherLine",
             "name": "Other Line",
             "sheet": "Some other kind of line",
             "desc": "There's a line that places some kind of restriction on some digits",
-            "img": "otherLine.png"
+            "img": "otherLine.png",
+            "largeImg": ""
         },
         {
             "id": "irregular",
             "name": "Irregular Sudoku",
             "sheet": "Irregular Sudoku",
-            "desc": "Regions boundaries are irregularly shaped"
+            "desc": "Regions boundaries are irregularly shaped",
+            "img": "irregular.png",
+            "largeImg": "large-irregular.png"
         },
         {
             "id": "chaosConstruct",
@@ -188,49 +199,65 @@
             "id": "skyscraper",
             "name": "Skyscrapers",
             "sheet": "Skyscrapers",
-            "desc": "Numbers outside the grid indicate how many digits are visible when looking into the grid. Digits block visibility of lower digits behind them"
+            "desc": "Numbers outside the grid indicate how many digits are visible when looking into the grid. Digits block visibility of lower digits behind them",
+            "img": "skyscraper.png",
+            "largeImg": "large-skyscraper.png"
         },
         {
             "id": "sandwich",
             "name": "Sandwich Sums",
             "sheet": "Sandwich Sums",
-            "desc": "Numbers outside the grid indicate the sum of the digits located between 2 specific digits"
+            "desc": "Numbers outside the grid indicate the sum of the digits sandwiched between two specific digits (generally 1 and 9)",
+            "img": "sandwich.png",
+            "largeImg": "large-sandwich.png"
         },
         {
             "id": "xSum",
             "name": "X Sums",
             "sheet": "X Sums",
-            "desc": "Numbers outside the grid indicate the sum of the first X digits, where X is the closest digit inside the grid"
+            "desc": "Numbers outside the grid indicate the sum of the first X digits, where X is the closest digit inside the grid",
+            "img": "xSum.png",
+            "largeImg": "large-xSum.png"
         },
         {
             "id": "modCells",
             "name": "Modifier Cells",
             "sheet": "Modifier Cells (some cells' values differ from their placed digit)",
-            "desc": "Some cells have a different value than the digit they contain"
+            "desc": "Some cells have a different value than the digit they contain",
+            "img": "modCells.png",
+            "largeImg": "large-modCells.png"
         },
         {
             "id": "differentDigits",
             "name": "Unusual Digits",
             "sheet": "Unusual Digits (eg. not the typical digits 1 to 9, or 1 to 6, etc.)",
-            "desc": "Puzzle uses different digits than usual"
+            "desc": "Puzzle uses different digits than usual, or perhaps even letters",
+            "img": "differentDigits.png",
+            "largeImg": "large-differentDigits.png"
         },
         {
             "id": "evenOdd",
             "name": "Even & Odd",
             "sheet": "Even & Odd",
-            "desc": "There's a clue that dictates some cells be odd or even"
+            "desc": "There's a clue that dictates specific cells be even or odd",
+            "img": "evenOdd.png",
+            "largeImg": "large-evenOdd.png"
         },
         {
             "id": "minMax",
             "name": "Minimum or Maximum",
             "sheet": "Minimum or Maximum Cells",
-            "desc": "A gray cell with 4 small arrows is either higher than every neighbor or lower, depending on the arrows' orientation"
+            "desc": "A gray cell with 4 small arrows is either higher than every neighbor or lower, depending on the arrows' orientation",
+            "img": "minMax.png",
+            "largeImg": "large-minMax.png"
         },
         {
             "id": "fog",
             "name": "Fog",
             "sheet": "Fog",
-            "desc": "The grid is partially obscured by fog that clears as digits are placed"
+            "desc": "The grid is partially obscured by fog that clears as digits are placed",
+            "img": "fog.png",
+            "largeImg": "large-fog.png"
         },
         {
             "id": "antiknight",
@@ -247,20 +274,26 @@
         {
             "id": "adjacency",
             "name": "Adjacency Restriction",
-            "sheet": "Adjacency Restriction (eg. adjacent digits can't sum to 5)",
-            "desc": "There is some kind of limitation on what values can go in any two adjacent cells"
+            "sheet": "Adjacency Restriction (eg. adjacent digits can't sum to 7)",
+            "desc": "There is some kind of limitation on what digits can go in any two adjacent cells",
+            "img": "adjacency.png",
+            "largeImg": "large-adjacency.png"
         },
         {
             "id": "path",
             "name": "Pathing",
             "sheet": "Solver must draw a path",
-            "desc": "The solver must draw a path or loop based on some criteria"
+            "desc": "The solver must draw a path or loop based on some criteria",
+            "img": "path.png",
+            "largeImg": "large-path.png"
         },
         {
             "id": "shade",
             "name": "Shading",
             "sheet": "Solver must shade some cells",
-            "desc": "The solver must color cells based on some criteria"
+            "desc": "The solver must color cells based on some criteria",
+            "img": "shade.png",
+            "largeImg": "large-shade.png"
         },
         {
             "id": "misc",

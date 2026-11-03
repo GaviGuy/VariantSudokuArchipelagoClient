@@ -95,6 +95,7 @@
     justify-self: stretch;
     height: auto;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .tab1-tags>* {

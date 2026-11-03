@@ -67,6 +67,14 @@ export function updatePuzzleList() {
         buildButton.setAttribute("href", "buildJson.html");
         buildButton.innerText = "Puzzle build page";
         listElem.appendChild(buildButton);
+
+        let everyButton = document.createElement("button");
+        everyButton.innerText = "summon thevery";
+        everyButton.addEventListener("click", () => {
+            listElem.appendChild(createPuzzleCard(getPuzzleById(-1)), 1, false);
+        });
+        listElem.appendChild(everyButton);
+
     }
 
     // sort puzzles
