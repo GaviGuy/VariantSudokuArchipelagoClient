@@ -69,6 +69,14 @@ export function getValidRerollTarget(puzzle, minDiff, maxDiff) {
     return valid[rand];
 }
 
+export function getRerollDest(puzzle) {
+    for(let i in save.rerolls) {
+        if(save.rerolls[i].source == puzzle.id) {
+            return getPuzzleById(save.rerolls[i].dest);
+        }
+    }
+}
+
 export function rerollPuzzle(puzzle) {
     if(getAvailableRerolls() < 1) return;
     const newPuzzle = getValidRerollTarget(puzzle, puzzle.rating-1, puzzle.rating);
@@ -458,6 +466,7 @@ function updateForDisconnect() {
     setTopMenuState(menuStates.fixed);
     document.getElementById("controls-disconnect").setAttribute("disabled", 1);
     document.getElementById("controls-connect").removeAttribute("disabled");
+    window.scrollTo(0, 0);
 }
 
 function login(isReconnect) {
@@ -665,4 +674,5 @@ function resetSave() {
     save.solvedIds = [];
     save.rerolls = [];
     save.itemIndex = 2;
+    save.freerolls = 0;
 }

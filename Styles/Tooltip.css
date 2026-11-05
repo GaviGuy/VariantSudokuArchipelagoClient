@@ -13,6 +13,7 @@
     text-align: center;
     padding: 5px;
     border-radius: 6px;
+    z-index: 50;
 
     position: absolute;
     bottom: 125%;

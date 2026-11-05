@@ -239,7 +239,7 @@
             "author": "everyone",
             "id": -1,
             "link": "",
-            "rating": 5,
+            "rating": -1,
             "solutionHint": "A really long solution code that is long and also very long. How long does it have to get before it causes issues, i wonder? has anything broken yet? no?  how about now? ...now?",
             "solutionHash": 199715630912787,
             "tags": [

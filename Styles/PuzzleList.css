@@ -22,12 +22,32 @@
     /* border-color: #400; */
 }
 
-#tab1-list>div {
+.rerolled {
+    pointer-events: all;
+    user-select: text;
+    position: absolute;
+    top: -8px;
+    height: 9rem;
+    
+    width: calc(100% - 4px);
+}
+
+.buried {
+    pointer-events: none;
+    user-select: none;
+}
+
+#tab1-list>* {
+    position: relative;
+}
+
+.card {
     border: 2px solid var(--color-main);
     border-radius: 4px;
     margin-top: 0.5em;
     background-color: var(--color-card);
     height: 9rem;
+    box-shadow: 2px 3px 6px #3338;
 }
 
 .card-top {

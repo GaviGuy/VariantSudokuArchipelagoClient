@@ -75,6 +75,12 @@ export function updatePuzzleList() {
         });
         listElem.appendChild(everyButton);
 
+        let showSave = document.createElement("button");
+        showSave.innerText = "Print Save";
+        showSave.addEventListener("click", () => {
+            console.log(AP.save);
+        });
+        listElem.appendChild(showSave);
     }
 
     // sort puzzles
@@ -91,19 +97,44 @@ export function updatePuzzleList() {
     filler = filler.filter((a, b) => filler.indexOf(a) === b);
     pillar = pillar.filter((a, b) => pillar.indexOf(a) === b);
 
+    const helper = ((id, type) => {
+        const solved = AP.save.solvedIds.includes(id);
+        let puzzle = AP.getPuzzleById(id);
+        let card = createPuzzleCard(puzzle, type, solved);
+        let dest = AP.getRerollDest(puzzle);
+        if(dest) card.classList.add("buried");
+        let depth = 1;
+
+        while(dest) {
+            let subCard = createPuzzleCard(dest, type, solved, puzzle);
+            const angle = (dest.id % 7 - 3) * 0.25 + "deg";
+            const x = (dest.id % 7 - 3) + "px";
+            const y = (dest.id % 7 - 3) - 8 + "px"; 
+            subCard.classList.add("rerolled");
+            subCard.style.setProperty("rotate", angle);
+            subCard.style.setProperty("left", x);
+            subCard.style.setProperty("top", y);
+            subCard.style.setProperty("z-index", depth++);
+
+            dest = AP.getRerollDest(dest);
+            if(dest) subCard.classList.add("buried");
+            card.appendChild(subCard);
+        }
+
+        listElem.appendChild(card);
+
+    });
+
     for(let i in filler) {
-        const solved = AP.save.solvedIds.includes(filler[i]);
-        listElem.appendChild(createPuzzleCard(getPuzzleById(filler[i]), 0, solved));
+        helper(filler[i], 0);
     }
 
     for(let i in pillar) {
-        const solved = AP.save.solvedIds.includes(pillar[i]);
-        listElem.appendChild(createPuzzleCard(getPuzzleById(pillar[i]), 1, solved));
+        helper(pillar[i], 1);
     }
 
     if(canAccessBoss()) {
-        const solved = AP.save.solvedIds.includes(AP.slotData.bossId);
-        listElem.appendChild(createPuzzleCard(getPuzzleById(AP.slotData.bossId), 2, solved));
+        helper(AP.slotData.bossId, 2);
     }
 }
 
@@ -137,26 +168,15 @@ function checkSolution(puzzle, solution) {
     return false;
 }
 
-function createPuzzleCard(puzzle, puzzleType, solved) {
-    // handle rerolls
-    const originalPuzzle = puzzle;
-    while(true) {
-        let found = false;
-        for(let i in AP.save.rerolls) {
-            if(AP.save.rerolls[i].source == puzzle.id) {
-                puzzle = getPuzzleById(AP.save.rerolls[i].dest);
-                found = true;
-                break;
-            }
-        }
-        if(!found) break;
-    }
-
+function createPuzzleCard(puzzle, puzzleType, solved, originalPuzzle) {
     const PUZZLE_CLASSES = ["filler", "pillar", "boss"];
-
+    
     let retElem = document.createElement("div");
-    retElem.classList.add(PUZZLE_CLASSES[puzzleType])
+    retElem.classList.add(PUZZLE_CLASSES[puzzleType]);
+    retElem.classList.add("card");
+
     if(solved) retElem.classList.add("solved");
+    if(!originalPuzzle) originalPuzzle = puzzle;
 
     // top layer: name/author/rating and asterisk notification
     let topElem = document.createElement("div");
@@ -279,7 +299,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
         submitButton.textContent = "Submit";
         bottomLeft.appendChild(submitButton);
 
-        if(AP.getAvailableRerolls() > 0) {
+        if(AP.getAvailableRerolls() > 0 && puzzleType < 2) {
             let rerollButton = document.createElement("button");
             rerollButton.addEventListener("click", () => {
                 if(confirm(`Spend a Puzzle Reroll? You have ${AP.getAvailableRerolls()}.`)) {
@@ -345,6 +365,7 @@ function createPuzzleCard(puzzle, puzzleType, solved) {
     retElem.appendChild(topElem);
     retElem.appendChild(middleElem);
     retElem.appendChild(bottomElem);
+
     return retElem;
 }
 
